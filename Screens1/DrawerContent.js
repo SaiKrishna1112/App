@@ -1,7 +1,10 @@
-import React,{useState} from 'react';
-import { StyleSheet, View,TouchableOpacity,Image,ToastAndroid} from 'react-native';
+import React,{useState,useEffect} from 'react';
+import { StyleSheet, View,TouchableOpacity,Image,ToastAndroid,Alert} from 'react-native';
 
-import { ImagePicker } from 'react-native-image-picker';
+import * as ImagePicker from 'expo-image-picker';
+import {launchCameraAsync, useCameraPermissions, PermissionStatus} from 'expo-image-picker';
+import {FormData} from "formdata-node";
+import axios from 'axios';
 import {
    Avatar,
    Title,
@@ -26,50 +29,129 @@ import {useSelector} from 'react-redux';
 
 
  export function DrawerContent(props){
-  const userDetail = useSelector(state=>state.logged);
+  useEffect(()=>{
+   getprofieshowss();
+  },[imageshow]);
+
+  const userDetails = useSelector(state=>state.counter);
+ const userDetail = useSelector(state=>state.logged);
+  var access = userDetails.headers.accesstoken;
+  var id = userDetails.data.id;
   const [pickedImagePath, setPickedImagePath] = useState('');
+  const fd = new FormData();
   const setToastMsg= msg =>{
    ToastAndroid.showWithGravity(msg, ToastAndroid.SHORT, ToastAndroid.CENTER);
   };
+  //------------------------PROFILEPIC-------------------------------//
+   const [imageshow,setimageshow] = useState();
+   const [cameraPermissionInformation, requestPermission] = ImagePicker.useCameraPermissions();
 
-   const uploadImage=()=>{
-    let options={
-     mediaType: 'photo',
-     quality:1,
-     includeBase64: true,
-    };
+  async function verifyPermissions() {
+   if (cameraPermissionInformation.status === PermissionStatus.UNDETERMINED){
+    const  permissionResponse = await requestPermission();
 
-    ImagePicker(options,response =>{
-     if(response.didCancel) {
-      setToastMsg('Cancelled image selection');
-     }else if(response.errorCode=='permissions'){
-      setToastMsg('permissions not satisfied')
-     }else if(response.errorCode=='other'){
-      setToastMsg(response.errorMessage)
-     }else if (response.assets[0].fileSize>2097152) {
-      alert("maximum image size exceeded");
-     }else {
-      setPickedImagePath(response.assets[0].base64);
-     }
+    return permissionResponse.granted;
+   }
+   if(cameraPermissionInformation.status === PermissionStatus.DENIED){
+    Alert.alert(
+     'Insufficient Permissions',
+    );
+    return false;
+   }
+   return true;
+  }
+   async function takeImageHandler() {
+   const hasPermission = await verifyPermissions();
+
+   if(!hasPermission){
+    return ;
+   }
+    const result = await launchCameraAsync({
+   type: "*/*",
+   allowsEditing: true,
+   copyToCacheDirectory: true,
+   aspect: [4, 3],
+  });
+  setimageshow(result.uri)
+  var name=result.uri.split('file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252FOxyloans-bf6d8ef4-4705-4802-b3a2-d6f53f612242/ImagePicker/')
+  var imageset={
+   name:name[1],
+   uri: result.uri,
+   size:(result.height)+(result.width),
+   type: "application/jpg"
+  }
+  //console.log(imageset);
+    fd.append("PROFILEPIC", imageset);
+  axios({
+     method:'post',
+     url:'http://ec2-13-235-82-38.ap-south-1.compute.amazonaws.com:8080/oxyloans/v1/user/'+id+'/upload/uploadProfilePic',
+     data:fd,
+     headers:{
+           accessToken:access,
+           'Content-Type' :'multipart/form-data',
+          }
+    })
+     .then(function (response) {
+       setToastMsg("Successfully Upload");
+           })
+     .catch(function (error) {
+      console.log('error',error);
+      alert("=======")
     });
-   };
+   }
+
+  //------------------------------profile Pic Get Call---------------------------------------------
+  const getprofieshowss=()=>{
+   axios({
+       method:'get',
+       url:'http://ec2-13-235-82-38.ap-south-1.compute.amazonaws.com:8080/oxyloans/v1/user/'+id+'/download/PROFILEPIC',
+       headers:{
+             accessToken:access,
+            }
+      })
+       .then(function (response) {
+        //console.log(response.data);
+         setimageshow(response.data.downloadUrl);
+             })
+       .catch(function (error) {
+        console.log('error',error);
+        console.log(error.response.data.errorMessage);
+      });
+
+  }
+
+
+
+     let imagePreview = <Text style={{marginTop:120,alignSelf:'center',justifyContent:'center',color:'white'}}>NO Image taken yet.</Text>
+
+      if(imageshow) {
+       imagePreview = <Image source={{uri:imageshow }} style={styles.image}/>
+      }
+
+///-------------------------end profile------------------------------------------------
+
   var LR;
   var BR;
      return(
            <View style={{flex:1}}>
                <DrawerContentScrollView {...props} style={{flex:1,margin:20,marginTop:30}}>
                 <View style={{flexDirection:'row'}}>
-                      <TouchableOpacity onPress={uploadImage}>
-                        <Avatar.Image size={70} source={require('../assets/avatar.png')}/>
-                        </TouchableOpacity>
+                              <View>
+                              <View style={{alignItems:'center',marginTop:10}}>
+                         <TouchableOpacity onPress={takeImageHandler}>
+                             <View style={styles.imagePreview}>{imagePreview}</View>
+                          </TouchableOpacity>
+                         </View>
+                              </View>
                    <View style={{flexDirection:'column',marginLeft:20}}>
-                       <Title style={{fontSize:15,width:100}}>{userDetail.firstName+userDetail.lastName}</Title>
+                       <Title style={{fontSize:15,width:120}}>{userDetail.firstName+userDetail.lastName}</Title>
                        <Caption>{userDetail.primaryType!='LENDER'? <Text>BR</Text>:<Text>LR</Text>}<Text>{userDetail.userId}</Text></Caption>
 
                    </View>
                 </View>
 
-                <Drawer.Section style={{marginTop:40,}}>
+                <Drawer.Section style={{marginTop:10}}>
+                <View style={{borderBottomWidth:0.6}}></View>
                    <DrawerItem
                    icon={({color,size})=>(
                        <Icon
@@ -113,7 +195,7 @@ import {useSelector} from 'react-redux';
                           />
                       )}
                       label='Running Deals'
-                      onPress={()=>{props.navigation.navigate('OngoingDeals')}}
+                      onPress={()=>{props.navigation.navigate('Running Deals')}}
                       />
                       <DrawerItem
                          icon={({color,size})=>(
@@ -126,6 +208,17 @@ import {useSelector} from 'react-redux';
                          label='Personal Deals'
                          onPress={()=>{props.navigation.navigate('PersonalDeals')}}
                          />
+                         <DrawerItem
+                            icon={({color,size})=>(
+                                <Icon
+                                name='map'
+                                color={color}
+                                size={size}
+                                />
+                            )}
+                            label='Mapped Users'
+                            onPress={()=>{props.navigation.navigate('Mapped Users')}}
+                            />
                       <DrawerItem
                          icon={({color,size})=>(
                              <Icon
@@ -135,7 +228,7 @@ import {useSelector} from 'react-redux';
                              />
                          )}
                          label='Participated Deals'
-                         onPress={()=>{props.navigation.navigate('ParticpatedDeals')}}
+                         onPress={()=>{props.navigation.navigate('Participated Deals')}}
                          />
                       <DrawerItem
                          icon={({color,size})=>(
@@ -146,8 +239,19 @@ import {useSelector} from 'react-redux';
                              />
                          )}
                          label='Closed Deals'
-                         onPress={()=>{props.navigation.navigate('MyClosedDeals')}}
+                         onPress={()=>{props.navigation.navigate('Closed Deals')}}
                          />
+                         <DrawerItem
+                            icon={({color,size})=>(
+                                <Icon
+                                name='mail'
+                                color={color}
+                                size={size}
+                                />
+                            )}
+                            label='Earning Certificate'
+                            onPress={()=>{props.navigation.navigate('Earning Certificate')}}
+                            />
                          <DrawerItem
                             icon={({color,size})=>(
                                 <Icon
@@ -203,28 +307,6 @@ import {useSelector} from 'react-redux';
                          label='View Ticket History'
                          onPress={()=>{props.navigation.navigate('Tickethistory')}}
                          />
-                         <DrawerItem
-                            icon={({color,size})=>(
-                                <Icon
-                                name='eye'
-                                color={color}
-                                size={size}
-                                />
-                            )}
-                            label='Contact'
-                            onPress={()=>{props.navigation.navigate('Contact12')}}
-                            />
-                            <DrawerItem
-                               icon={({color,size})=>(
-                                   <Icon
-                                   name='eye'
-                                   color={color}
-                                   size={size}
-                                   />
-                               )}
-                               label='GPRS'
-                               onPress={()=>{props.navigation.navigate('GPRS')}}
-                               />
                </Drawer.Section>
 
                </DrawerContentScrollView>
@@ -246,3 +328,16 @@ import {useSelector} from 'react-redux';
            </View>
      );
  }
+const styles = StyleSheet.create({
+ imagePreview:{
+borderRadius:100,
+width:75,
+height:75,
+backgroundColor:'black'
+},
+image:{
+width:75,
+height:75,
+borderRadius:100
+}
+})

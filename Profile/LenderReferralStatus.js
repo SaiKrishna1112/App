@@ -78,13 +78,8 @@ function fun(){
 
     return (
         <ScrollView nestedScrollEnabled={true}>
-        <SafeAreaView style={{backgroundColor:"#CCD8E1",marginTop:20}}>
+        <SafeAreaView style={{backgroundColor:"#CCD8E1",marginTop:4}}>
       <View>
-           <View style={{flexDirection:'row'}}>
-           <TouchableOpacity onPress={()=>{navigation.navigate('BorrowerDrawer')}} style={{marginLeft:20}}>
-            <Icon name="arrow-back" color="#4F8EF7" size={30}/></TouchableOpacity>
-          <Text style={{fontSize:22,fontWeight:"bold",alignSelf:'flex-end',marginLeft:60}}>Referral Info </Text>
-             </View>
           <View style={styles.cont}>
             <Text style={styles.txt2}> Note : </Text>
             <Text style={styles.text}><Icon name="arrow-forward" color="#4F8EF7" size={18}/> Invited: You have invited but your friend is not yet registered.
@@ -128,8 +123,8 @@ shadowRadius: 8,
 elevation: 5,
 borderRadius: 5,
 backgroundColor: '#FFFFFF',
-marginTop:30,
-width:330,
+marginTop:4,
+width:350,
 alignSelf:'center',
 },
 txt1:{
@@ -200,7 +195,7 @@ renderview:
     borderRadius: 5,
     backgroundColor: '#FFFFFF',
     marginTop:40,
-    width:300,
+    width:330,
 },
 txt5:{
 

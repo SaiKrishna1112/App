@@ -9,7 +9,7 @@ import {useSelector} from 'react-redux';
 
 
 
-const MyloanRequest=({navigation})=>{
+const MyloanRequest=({navigation,route})=>{
   const userDetails = useSelector(state=>state.counter);
   const userDetail = useSelector(state=>state.logged);
   var access = userDetails.headers.accesstoken;
@@ -29,7 +29,7 @@ const MyloanRequest=({navigation})=>{
     const[loading,setLoading]=useState(false);
     const[loanEligibility,setloanEligibility]=useState();
     const[requestId,setrequestId]=useState([]);
-    const[status,setStatus]=useState();
+    const[status,setStatus]=useState(route.params.status);
 
 
 
@@ -42,7 +42,7 @@ const MyloanRequest=({navigation})=>{
       loanPurpose:LoanPurpose,
       expectedDate:text,
       durationType:value,
-      status:'Edit',
+      status:status,
     },{
 
       headers:{
@@ -51,7 +51,7 @@ const MyloanRequest=({navigation})=>{
    }})
 
     .then(function (response) {
-   console.log(response.data);
+   //console.log(response.data);
       setTimeout(function(){
           Alert.alert("Your Loan Application is Sucessfully Editied");
     }, 3000);
@@ -95,13 +95,7 @@ const MyloanRequest=({navigation})=>{
 
 
 return (
- <View style={{marginTop:60,alignSelf:'center',justifyContent:'center'}}>
- <View style={{flexDirection:'row',marginTop:30}}>
- <TouchableOpacity onPress={()=>navigation.navigate('BorrowerDrawer')} style={{alignSelf:'flex-start'}}>
- <MaterialCommunityIcons style={{marginLeft:15,alignSelf:'center'}} name = "arrow-left-thick" color = 'black' size = { 35 }/>
- </TouchableOpacity>
- <Text style={{fontSize:22,fontWeight:'bold',alignItems:'center',justifyContent:'center',marginLeft:50}}>My Loan Application</Text>
- </View>
+ <View style={{marginTop:8,alignSelf:'center',justifyContent:'center'}}>
 <View style={{marginTop:10,marginBottom:30}}>
 <ScrollView>
 <View style={{height:1000,alignSelf:'center'}}>

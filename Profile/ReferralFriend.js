@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
 
 
-import { Text, View , StyleSheet ,TextInput,TouchableOpacity,Alert,ScrollView} from 'react-native';
+import { Text, View , StyleSheet ,TextInput,TouchableOpacity,Alert,ScrollView,Share} from 'react-native';
 import {useSelector} from "react-redux";
 import {Picker} from "@react-native-picker/picker";
 
@@ -92,10 +92,49 @@ const invitefunction=props=>{
      }
 
 var fullemailcontent=mailContent+'\n'+bottomOfTheMail;
+
+const onShare = async () => {
+   try {
+     const result = await Share.share({
+       message:
+         'http://182.18.139.198/new/register_borrower?ref='+userId,
+     });
+     if (result.action === Share.sharedAction) {
+       if (result.activityType) {
+         // shared with activity type of result.activityType
+       } else {
+         // shared
+       }
+     } else if (result.action === Share.dismissedAction) {
+       // dismissed
+     }
+   } catch (error) {
+     alert(error.message);
+   }
+ };
+ const onShares = async () => {
+    try {
+      const result = await Share.share({
+        message:
+          'http://182.18.139.198/new/register_lender?ref='+userId,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
     return(
 <View style={styles.container}>
 <View style={{alignSelf:'center'}}>
-<ScrollView>
     <View style={styles.cont}>
         <Text style={styles.txt1}> Refer a Friend & Earn  </Text>
         <Text style={styles.text}><Icon name="arrow-forward" color="#4F8EF7" size={20}/>  Let us grow as a family, while you are lending money through OXYLOANS, we ourselves a back-up in life for each other in all kinds of times.
@@ -105,9 +144,22 @@ var fullemailcontent=mailContent+'\n'+bottomOfTheMail;
         <Text style={styles.text1}><Icon name="arrow-forward" color="#4F8EF7" size={20}/>  On the first INR 1,00,000 you will get INR 1000 For the second 1-lakh, you will get INR 100 For the third 1-lakh, you will get INR 100. In total, you will get INR 1200.
         </Text>
     </View>
+    <TouchableOpacity onPress={onShare}>
+    <View style={{marginTop:5,marginLeft:250,flexDirection:'row',borderWidth:1,backgroundColor:'#00ffff'}}>
+       <Icon name="share-social" label="Borrower" size={18}/>
+       <Text style={{fontWeight:'bold'}}>Borrower</Text>
+    </View>
+    </TouchableOpacity>
+    <TouchableOpacity onPress={onShares}>
+    <View style={{marginTop:5,marginLeft:250,flexDirection:'row',borderWidth:1,backgroundColor:'#bdb76b'}}>
+       <Icon name="share-social" label="Borrower" size={18}/>
+       <Text style={{fontWeight:'bold'}}>Lender</Text>
+    </View>
+    </TouchableOpacity>
+    <ScrollView>
     <View style={styles.cont1}>
-        <ScrollView>
         <Text style={styles.txt1}>Invite Friends/Professionals </Text>
+        <View style={{alignItems:'center'}}>
                 <View style={styles.inputbox}>
 
                 <Text style={{fontSize:18,fontWeight:"bold"}}>Friend Name : </Text>
@@ -130,7 +182,8 @@ var fullemailcontent=mailContent+'\n'+bottomOfTheMail;
 
                </View>
 
-               <Text style={{fontWeight:"bold",marginLeft:20}}>Primary Type : </Text>
+               <View>
+               <Text style={{fontWeight:"bold",marginLeft:20,fontSize:16,fontWeight:'bold'}}>Primary Type : </Text>
                <Picker
                  selectedValue={selectedValue}
                  style={{ height: 40, width: 300,backgroundColor:"#E8E8E8",marginLeft:18,borderRadius:15,marginTop:5}}
@@ -138,25 +191,25 @@ var fullemailcontent=mailContent+'\n'+bottomOfTheMail;
                <Picker.Item label="LENDER" value="LENDER" />
                <Picker.Item label="BORROWER" value="BORROWER" />
                </Picker>
+               </View>
                <View style={styles.inputbox}>
 
                 <Text style={{fontSize:18,fontWeight:"bold"}}>Mail Subject: </Text>
-                <TextInput  placeholder="Mail Subject"onChangeText={(text)=>setmailsubject(text)} value={mailSubject}/>
+                <TextInput  placeholder="Mail Subject"onChangeText={(text)=>setmailsubject(text)}  multiline={true} value={mailSubject}/>
 
                </View>
                <View style={styles.inputbox}>
 
                 <Text style={{fontSize:18,fontWeight:"bold"}}>Mail Content: </Text>
-                <TextInput  placeholder="Mail Content"onChangeText={(text)=>setmailcontent(text)} value={fullemailcontent}/>
+                <TextInput  placeholder="Mail Content"onChangeText={(text)=>setmailcontent(text)}  multiline={true} value={fullemailcontent}/>
 
+               </View>
                </View>
             <View>
                     <TouchableOpacity style={styles.btn} onPress={invitefunction}>
                             <Text style={{fontSize:15,fontWeight:"bold"}}><Icon name="person-add" color="black" size={17}/>   Invite  </Text>
                     </TouchableOpacity>
             </View>
-
-            </ScrollView>
     </View>
     </ScrollView>
     </View>
@@ -183,9 +236,9 @@ const styles=StyleSheet.create({
     elevation: 5,
     borderRadius: 5,
     backgroundColor: '#FFFFFF',
-    marginTop:50,
-    width:340,
-    marginLeft:10,
+    marginTop:8,
+    width:360,
+    marginLeft:5,
     },
     cont1:{
         justifyContent:"flex-start",
@@ -198,8 +251,8 @@ const styles=StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#FFFFFF',
         marginTop:13,
-        width:340,
-        marginLeft:10,
+        width:360,
+        marginLeft:5,
     },
     txt1:{
         marginTop:10,

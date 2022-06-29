@@ -315,55 +315,49 @@ error.response.data.errorMessage,
 
  const renderList = ({item})=>{
   return (
-   <View>
-          <View style={styles.renderview}>
-                  <View style={styles.insideview}>
-                     <Text style={styles.txt5}>Loan Request Amount</Text>
-                     <Text style={{color:"black",fontSize:16,paddingLeft:100}}>{item.loanRequestAmount}</Text>
-
-                  </View>
-
-                  <View style={styles.insideview}>
-                    <Text style={styles.txt5}>Loan Request ID</Text>
-                    <Text style={{color:"black",fontSize:16,paddingLeft:120}}>{item.loanRequest}</Text>
-
-
-                  </View>
-
-                  <View style={styles.insideview}>
-                    <Text style={styles.txt5}>ROI  </Text>
-                    <Text style={{color:"black",fontSize:16,paddingLeft:225}}>{item.rateOfInterest}</Text>
-
-                  </View>
-
-                  <View style={styles.insideview}>
-                    <Text style={styles.txt3}>Rapayment Method  </Text>
-                    <Text style={{color:"black",fontSize:16,paddingLeft:110}}>{item.rateOfInterest}</Text>
-                  </View>
-
-
-                  <View style={styles.insideview}>
-                    <Text style={styles.txt3}>Loan Request Date  </Text>
-                    <Text style={{color:"black",fontSize:16,paddingLeft:80}}> {item.loanRequestedDate}</Text>
-                  </View>
-
-                  <View style={styles.insideview}>
-                    <Text style={styles.txt3}>Loan Purpose </Text>
-                    <Text style={{color:"black",fontSize:16,paddingLeft:120}}>{item.loanPurpose}</Text>
-                  </View>
-
-                  <View style={styles.insideview}>
-                    <Text style={styles.txt3}>Loan Status </Text>
-                    <Text style={{color:"black",fontSize:16,paddingLeft:135}}>{item.loanStatus}</Text>
-                  </View>
-
-                  <View style={styles.insideview}>
-                    <Text style={styles.txt3}> Modify </Text>
-                    <View style={{flexDirection:'row',marginLeft:45}}>
-                    <TouchableOpacity style={styles.btn1} onPress={()=>{navigation.navigate('MyloanRequest')}}><Text style={{color:"black"}}>Edit</Text></TouchableOpacity>
+       <View>
+            <View style={{borderColor:'grey',borderWidth:1.8,marginHorizontal:15,height:"auto",padding:8,borderTopWidth:8,borderTopColor:'#569F40',borderBottomWidth:0.5}}>
+                <View style={styles.flatmain}>
+                   <View style={styles.TxtView1}><Text style={styles.Txt1}>Loan Request Amount</Text></View>
+                   <View><Text style={styles.Txt2}>{item.loanRequestAmount}</Text></View>
+                </View>
+                <View style={styles.flatmain}>
+                   <View style={styles.TxtView1}><Text style={styles.Txt1}>Loan Request ID</Text></View>
+                   <View><Text style={styles.Txt2}>{item.loanRequest}</Text></View>
+                </View>
+                <View style={styles.flatmain}>
+                   <View style={styles.TxtView1}><Text style={styles.Txt1}>ROI</Text></View>
+                   <View><Text style={styles.Txt2}>{item.rateOfInterest}</Text></View>
+                </View>
+                <View style={styles.flatmain}>
+                   <View style={styles.TxtView1}><Text style={styles.Txt1}>Loan Request Date</Text></View>
+                   <View><Text style={styles.Txt2}>{item.loanRequestedDate}</Text></View>
+                </View>
+                <View style={styles.flatmain}>
+                   <View style={styles.TxtView1}><Text style={styles.Txt1}>Loan Purpose</Text></View>
+                   <View><Text style={styles.Txt2}>{item.loanPurpose}</Text></View>
+                </View>
+                <View style={styles.flatmain}>
+                   <View style={styles.TxtView1}><Text style={styles.Txt1}>Loan Status</Text></View>
+                   <View><Text style={styles.Txt2}>{item.loanStatus}</Text></View>
+                </View>
+                  <View style={styles.flatmain}>
+                    <View style={styles.TxtView}><Text style={styles.Txt1}>Modify</Text></View>
+                    {item.loanStatus=="LOANOFFERACCEPTED" ?
+                    <View>
+                    <View style={{flexDirection:'row'}}>
+                    <TouchableOpacity style={styles.btn}><Text style={{color:"black"}}>Edit</Text></TouchableOpacity>
+                    <TouchableOpacity style={styles.btn}><Text style={{color:"black"}}>Hold</Text></TouchableOpacity>
+                    <TouchableOpacity style={styles.btn}><Text style={{color:"black"}}>Delete</Text></TouchableOpacity>
+                    </View>
+                    </View>   :
+                    <View>
+                    <View style={{flexDirection:'row'}}>
+                    <TouchableOpacity style={styles.btn1} onPress={()=>{navigation.navigate('MyloanRequest',{status:'Edit'})}}><Text style={{color:"black"}}>Edit</Text></TouchableOpacity>
                     <TouchableOpacity style={styles.btn1} onPress={HoldFunction}><Text style={{color:"black"}}>Hold</Text></TouchableOpacity>
                     <TouchableOpacity style={styles.btn1} onPress={DeleteFunction}><Text style={{color:"black"}}>Delete</Text></TouchableOpacity>
                     </View>
+                    </View>}
                   </View>
            </View>
            </View>
@@ -405,56 +399,15 @@ const styles=StyleSheet.create({
         backgroundColor: '#FFFFFF',
         width:350,
     },
-    insideview:{
-        flexDirection:"row",
-        borderBottomWidth:1,
-        borderBottomColor:"black",
-        marginLeft:10,
-        marginRight:10,
-        padding:5,
-        justifyContent:"flex-start"
-    },
-    txt5:{
-
-        color:"black",
-        fontSize:16,
-        borderBottomColor:"black",
-        fontWeight:"bold",
-    },
-    txt3:{
-        color:"black",
-        fontSize:16,
-        fontWeight:"bold",
-    },
-    inputbox:{
-      position:'relative',
-      backgroundColor:'#E8E8E8',
-      borderRadius: 16,
-      width:300,
-      height:'auto',
-      alignItems: 'flex-start',
-      paddingLeft:15,
-      paddingVertical:5,
-      margin:10,
-      marginTop:5,
-      marginLeft:50
-  },
-  slide:{
-    marginLeft:20,
-    marginRight:20
-  },
-
   btn:{
-    // margin:2,
-    padding:10,
-    width:100,
+    padding:5,
+    width:60,
     justifyContent:"center",
     alignItems:"center",
-    alignSelf:"center",
     borderRadius:5,
-    backgroundColor:"#4CAF50",
-  marginTop:10,
-  marginBottom:30
+    backgroundColor:"#FF2E2E",
+    marginLeft:10,
+    opacity:0.1
     },
     btn1:{
       padding:5,
@@ -468,8 +421,34 @@ const styles=StyleSheet.create({
       lottie: {
         width: 150,
         height: 150
+      },flatmain:{
+        flexDirection:"row",
+        alignItems:'center',
+        borderBottomColor:'grey',
+        borderBottomWidth:1,
+        paddingVertical:5
       },
 
+      Txt1:{
+          fontWeight:'bold',
+          color:'#569F40',
+          fontSize:15
+
+      },
+
+      Txt2:{
+          fontWeight:'bold',
+          color:'black',
+          fontSize:15
+
+      },
+
+      TxtView1:{
+          width:180,
+      },
+      TxtView:{
+          width:130,
+      }
 })
 
 

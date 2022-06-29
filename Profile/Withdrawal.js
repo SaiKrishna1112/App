@@ -34,8 +34,8 @@ const Withdrawal=({navigation})=>{
             }
       })
       .then(function (response) {
-       console.log("=================================");
-       console.log(response.data)
+       //console.log("=================================");
+       //console.log(response.data)
        setHistory(response.data.lenderPaticipatedResponseDto)
        setTimeout(function(){
         setloading(false)
@@ -132,13 +132,7 @@ const renderList = ({ item }) => {
          },[])
 
 return(
- <SafeAreaView style={{paddingTop:5,flex:1,marginBottom:0}}>
- <View style={{flexDirection:'row',marginTop:40}}>
- <TouchableOpacity onPress={()=>navigation.navigate('LenderDrawer')} style={{alignSelf:'flex-start'}}>
- <MaterialCommunityIcons style={{marginLeft:20,alignSelf:'center'}} name = "arrow-left-thick" color = 'black' size = { 35 }/>
- </TouchableOpacity>
- <Text style={{fontSize:22,fontWeight:'bold',alignItems:'center',justifyContent:'center',marginLeft:85}}>WITHDRAW</Text>
- </View>
+ <SafeAreaView style={{paddingTop:2,flex:1,marginBottom:0}}>
  <View style={{alignItems:'center',marginTop:20}}>
  <View style={{flexDirection:'row',alignItems:'space-between',justifyContent:'space-around'}}>
  <View style={{marginTop:10,
@@ -163,10 +157,10 @@ return(
   </View>
   <View style={{flexDirection:'row'}}>
   <View style={styles.btn}>
-  <TouchableOpacity onPress={()=>navigation.navigate('Withdrawalfromwallet')}><Text style={styles.txt}>Withdraw from a Wallet</Text></TouchableOpacity>
+  <TouchableOpacity onPress={()=>navigation.navigate('Withdrawalfromwallet')}><Text style={styles.txt}>From a Wallet</Text></TouchableOpacity>
    </View>
    <View style={styles.btn}>
-   <TouchableOpacity onPress={()=>navigation.navigate('Withdrawalhistory')}><Text style={styles.txt}>Withdrawal Transaction History</Text></TouchableOpacity>
+   <TouchableOpacity onPress={()=>navigation.navigate('Withdrawalhistory')}><Text style={styles.txt}>Transaction History</Text></TouchableOpacity>
     </View>
     </View>
   <FlatList
@@ -193,9 +187,11 @@ const styles = StyleSheet.create({
   borderWidth:1,
   borderRadius:5,
   backgroundColor:'black',//#569F40
-  width:200,
+  width:150,
   alignSelf:'center',
-  padding:6
+  padding:6,
+  justifyContent:'space-around',
+  marginLeft:20
  },
  btn1:{
   marginTop:10,

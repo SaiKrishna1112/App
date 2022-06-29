@@ -74,7 +74,7 @@ const HomeStackScreen = ({navigation})=>(
    <HomeStack.Screen name="Dashboard" component={BorrowerHome} options={{
      headerLeft:()=>(
      <Icon.Button name="ios-menu" size={35} backgroundColor="#009387" onPress={()=>navigation.toggleDrawer()}></Icon.Button>
-     )
+    ),
    }}/>
 
  </HomeStack.Navigator>
@@ -94,7 +94,7 @@ fontWeight:'bold'
 options={{
 headerLeft:()=>(
 <Icon.Button name="ios-menu" size={35} backgroundColor="#009387" onPress={()=>navigation.toggleDrawer()}></Icon.Button>
-)
+),
 }}
 />
 
@@ -115,7 +115,7 @@ fontWeight:'bold'
 options={{
 headerLeft:()=>(
 <Icon.Button name="ios-menu" size={35} backgroundColor="#009387" onPress={()=>navigation.toggleDrawer()}></Icon.Button>
-)
+),
 }}
 />
 

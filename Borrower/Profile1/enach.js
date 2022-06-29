@@ -1,239 +1,208 @@
-import React,{useState,useEffect} from "react";
-import { View,Text ,StyleSheet,FlatList,TextInput,ScrollView,TouchableOpacity,Alert} from "react-native";
-import axios from "axios";
+import React, { useState,useEffect } from 'react'
 import {useSelector} from 'react-redux';
-import {MaterialCommunityIcons} from '@expo/vector-icons';
-import AnimatedLoader from "react-native-animated-loader";
+import Icon from 'react-native-vector-icons/Ionicons';
+import axios from "axios";
+
+import { StyleSheet, Text, View,Button ,TextInput,FlatList,Modal,SafeAreaView,Alert,TouchableOpacity} from 'react-native';
 
 
-const Enach=({navigation})=>{
-  const userDetails = useSelector(state=>state.counter);
+const Enach = ({navigation}) => {
+
+    const userDetails = useSelector(state=>state.counter);
+    var name=userDetails.data.firstName;
+    // console.log(name);
   const userDetail = useSelector(state=>state.logged);
-  var access = userDetails.headers.accesstoken;
-  var id = userDetails.data.id;
-  const [loading,setLoading]=useState(false);
-  const [results,setresults]=useState([]);
+    var access = userDetails.headers.accesstoken;
+    var id = userDetails.data.id;
+    var primarytype=userDetails.data.primaryType;
+    // console.log(primarytype)
+const [status,setstatus]=useState();
+const[load,setLoading]=useState();
+const[result,setresults]=useState();
+const[otp,setotp]=useState();
+const[loanRequestId,setloanRequestId]=useState();
 
 
-var data  = {
-        leftOperand:{
-            fieldName:"borrowerUserId",
-            fieldValue:id,
-            operator:"EQUALS"
-           },
-           logicalOperator:"AND",
-           rightOperand:{
-              leftOperand:{
-                fieldName:"borrowerEsignId",
-                operator:"NOT_NULL"
-               },
-              logicalOperator:"AND",
-                rightOperand:{
-                   fieldName:"loanStatus",
-                   fieldValue:"Active",
-                   operator:"EQUALS"
-                  }},
-              page:{
-                pageNo:1,
-                pageSize:10
-               },
-               sortBy:"loanId",
-               sortOrder:"DESC"
-           }
+
+const searchEnachMandate=()=>{
+  axios.post('http://ec2-13-235-82-38.ap-south-1.compute.amazonaws.com:8080/oxyloans/v1/user/'+id+'/loan/BORROWER/searchEnachMandate',{
+    leftOperand:{fieldName:"borrowerUserId",
+                   fieldValue:id,
+                   operator:"EQUALS"},
+    logicalOperator:"AND",
+    rightOperand:{leftOperand:{fieldName:"borrowerEsignId",
+                                    operator:"NOT_NULL"},
+                    logicalOperator:"AND",
+                    rightOperand:{fieldName:"loanStatus",
+                                  fieldValue:"Active",
+                                  operator:"EQUALS"}},
+    page:{pageNo:1,pageSize:10},
+    sortBy:"loanId",
+    sortOrder:"DESC"},
+  {
+    headers:{
+      accessToken:access,
+    }
+  })
+  .then(function (response) {
+    console.log("======================")
+    console.log(response.data.results);
+    setresults(response.data.results);
+
+    setTimeout(function(){
+     setLoading(false)
+            })
+           })
+    .catch(function (error) {
+     console.log('error',error);
+     Alert.alert(
+"Warring",
+error.response.data.errorMessage,
+[
+ { text: "OK", onPress: () => setLoading(false) }
+]
+);
+   });
+}
 
 
-  const postFunction=()=>{
-   axios({
-      method:'post',
-      url:'http://ec2-13-235-82-38.ap-south-1.compute.amazonaws.com:8080/oxyloans/v1/user/'+id+'/loan/BORROWER/searchEnachMandate',
-      data:data,
-      headers:{
-            accessToken:access,
-           }
-     })
-     .then(function (response) {
-      console.log(response.data)
-      setresults(response.data.results)
-      setTimeout(function(){
-       setLoading(false)
-              })
-             })
-      .catch(function (error) {
-       console.log('error',error);
-       Alert.alert(
-  "Warring",
-  error.response.data.errorMessage,
-  [
-   { text: "OK", onPress: () => setLoading(false) }
-  ]
- );
-     });
-  }
+useEffect(()=>{
+    searchEnachMandate();
 
-  const renderList = ({item})=>{
-   return (
-    <View>
-           <View style={styles.renderview}>
-                   <View style={styles.insideview}>
-                      <Text style={styles.txt5}>Lender Name	</Text>
-                      <Text style={{color:"black",fontSize:16,paddingLeft:100}}>{item.loanRequestAmount}</Text>
+},[])
 
-                   </View>
-
-                   <View style={styles.insideview}>
-                     <Text style={styles.txt5}>	Loan ID</Text>
-                     <Text style={{color:"black",fontSize:16,paddingLeft:120}}>{item.loanRequest}</Text>
+    const renderList = ({ item }) => {
 
 
-                   </View>
+      return (
 
-                   <View style={styles.insideview}>
-                     <Text style={styles.txt5}>Loan Amount  </Text>
-                     <Text style={{color:"black",fontSize:16,paddingLeft:225}}>{item.rateOfInterest}</Text>
-
-                   </View>
-
-                   <View style={styles.insideview}>
-                     <Text style={styles.txt3}>Rate of Interest  </Text>
-                     <Text style={{color:"black",fontSize:16,paddingLeft:110}}>{item.rateOfInterest}</Text>
-                   </View>
-
-
-                   <View style={styles.insideview}>
-                     <Text style={styles.txt3}>Interest Amount  </Text>
-                     <Text style={{color:"black",fontSize:16,paddingLeft:80}}> {item.loanRequestedDate}</Text>
-                   </View>
-
-                   <View style={styles.insideview}>
-                     <Text style={styles.txt3}>Tenure </Text>
-                     <Text style={{color:"black",fontSize:16,paddingLeft:120}}>{item.loanPurpose}</Text>
-                   </View>
-
-                   <View style={styles.insideview}>
-                     <Text style={styles.txt3}>Status </Text>
-                     <Text style={{color:"black",fontSize:16,paddingLeft:135}}>{item.loanStatus}</Text>
-                   </View>
-
-                   <View style={styles.insideview}>
-                     <Text style={styles.txt3}>Is ECS Activated </Text>
-                     <Text style={{color:"black",fontSize:16,paddingLeft:135}}>{item.loanStatus}</Text>
-                   </View>
-
-                   </View>
-            </View>
-      )
-     };
-
-  return(
-      <View style={{flex:9,marginTop:20}}>
-      <View style={{flexDirection:'row',marginTop:30}}>
-      <TouchableOpacity onPress={()=>navigation.navigate('BorrowerDrawer')} style={{alignSelf:'flex-start'}}>
-      <MaterialCommunityIcons style={{marginLeft:15,alignSelf:'center'}} name = "arrow-left-thick" color = 'black' size = { 35 }/>
-      </TouchableOpacity>
-      <Text style={{fontSize:22,fontWeight:'bold',alignItems:'center',justifyContent:'center',marginLeft:110}}>eNACH</Text>
-      </View>
-             <View style={{marginTop:20}}>
-
-             </View>
-             <AnimatedLoader
-              visible={loading}
-              overlayColor="rgba(255,255,255,0.75)"
-              source={require("../loading-state.json")}
-              animationStyle={styles.lottie}
-              speed={1}>
-          <Text style={{fontSize:18,fontWeight:'bold'}}>Loading.....</Text>
-          </AnimatedLoader>
+      <View style={{backgroundColor:'white',marginHorizontal:8,height:"auto",padding:8,marginVertical:8,borderLeftColor:'green',borderLeftWidth:4.5}}>
+        <View style={styles.flatmain}>
+        <View style={styles.TxtView1}><Text style={styles.Txt1}>Lender Name</Text></View>
+        <View><Text style={styles.Txt2}>{item.lenderUser.firstName}</Text></View>
         </View>
 
-        // <FlatList
-        //      data={requestId}
-        //      renderItem={renderList}
-        // />
+        <View style={styles.flatmain}>
+        <View style={styles.TxtView1}><Text style={styles.Txt1}>Loan Request</Text></View>
+        <View><Text style={styles.Txt2}>{item.loanRequest}</Text></View>
+        </View>
 
+        <View style={styles.flatmain}>
+        <View style={styles.TxtView1}><Text style={styles.Txt1}>Loan Amount</Text></View>
+        <View><Text style={styles.Txt2}>{item.loanRequestAmount}</Text></View>
+        </View>
+
+        <View style={styles.flatmain}>
+        <View style={styles.TxtView1}><Text style={styles.Txt1}>EMI/Interest Type </Text></View>
+        <View><Text style={styles.Txt2}>{item.repaymentMethod}</Text></View>
+        </View>
+
+        <View style={styles.flatmain}>
+        <View style={styles.TxtView1}><Text style={styles.Txt1}>ROI </Text></View>
+        <View><Text style={styles.Txt2}>{item.rateOfInterest}%</Text></View>
+        </View>
+
+        <View style={styles.flatmain}>
+        <View style={styles.TxtView1}><Text style={styles.Txt1}>Duration </Text></View>
+        <View><Text style={styles.Txt2}>{item.duration}</Text></View>
+        </View>
+
+        <View style={styles.flatmain}>
+        <View style={styles.TxtView1}><Text style={styles.Txt1}>Loan Status  </Text></View>
+        <View><Text style={styles.Txt2}>{item.loanStatus}</Text></View>
+        </View>
+
+
+        <View style={styles.flatmain}>
+        <View style={styles.TxtView1}><Text style={styles.Txt1}>ENach</Text></View>
+        <View><TouchableOpacity style={styles.btn} ><Text style={styles.btntxt}> ENach</Text></TouchableOpacity></View>
+        </View>
+
+
+      </View>
+
+      );
+    };
+
+
+
+  return (
+
+    <SafeAreaView>
+      <FlatList
+           data={result}
+
+           renderItem={renderList}
+
+          //  keyExtractor={item => item.}
+      />
+
+    </SafeAreaView>
   )
- }
+}
 
- const styles=StyleSheet.create({
-     renderview:
-     {
-         marginBottom:10,
-         borderColor:"grey",
-         alignSelf:"center",
-         shadowColor: 'black',
-         shadowOpacity: 0.26,
-         shadowOffset: { width: 0, height: 2 },
-         shadowRadius: 8,
-         elevation: 5,
-         borderRadius: 5,
-         backgroundColor: '#FFFFFF',
-         width:350,
-     },
-     insideview:{
-         flexDirection:"row",
-         borderBottomWidth:1,
-         borderBottomColor:"black",
-         marginLeft:10,
-         marginRight:10,
-         padding:5,
-         justifyContent:"flex-start"
-     },
-     txt5:{
+const styles = StyleSheet.create({
+  flatmain:{
+    flexDirection:"row",
+    alignItems:'center',
+    borderBottomColor:'grey',
+    borderBottomWidth:1,
+    paddingVertical:5
+  },
 
-         color:"black",
-         fontSize:16,
-         borderBottomColor:"black",
-         fontWeight:"bold",
-     },
-     txt3:{
-         color:"black",
-         fontSize:16,
-         fontWeight:"bold",
-     },
-     inputbox:{
-       position:'relative',
-       backgroundColor:'#E8E8E8',
-       borderRadius: 16,
-       width:300,
-       height:'auto',
-       alignItems: 'flex-start',
-       paddingLeft:15,
-       paddingVertical:5,
-       margin:10,
-       marginTop:5,
-       marginLeft:50
-   },
-   slide:{
-     marginLeft:20,
-     marginRight:20
-   },
+  Txt1:{
+      fontWeight:'bold',
+      color:'#569F40',
+      fontSize:15,
 
-   btn:{
-     // margin:2,
-     padding:10,
-     width:100,
-     justifyContent:"center",
-     alignItems:"center",
-     alignSelf:"center",
-     borderRadius:5,
-     backgroundColor:"#4CAF50",
-   marginTop:10,
-   marginBottom:30
-     },
-     btn1:{
-       padding:5,
-       width:60,
-       justifyContent:"center",
-       alignItems:"center",
-       borderRadius:5,
-       backgroundColor:"#4CAF50",
-       marginLeft:10
-       },
-       lottie: {
-         width: 150,
-         height: 150
-       },
+  },
 
- })
+  Txt2:{
+      fontWeight:'bold',
+      color:'black',
+      fontSize:15
+
+  },
+
+  TxtView1:{
+      width:190,
+  },
+  btn:{
+    width:130,
+    backgroundColor:"#FFA500",
+    borderRadius:5
+  },
+  btn1:{
+    marginLeft:10,
+    backgroundColor:"#FFA500",
+    borderRadius:5,
+    width:100,
+    marginTop:10
+  },
+  btntxt:{
+    fontWeight:"bold",
+    alignSelf:"center"
+  },
+  btntxt1:{
+    fontWeight:"bold",
+    alignSelf:"center",
+    justifyContent:"center",
+    marginTop:10
+
+  },
+  input:{
+    borderColor:"grey",
+    borderRadius:5,
+    borderWidth:2,
+    width:90,
+    padding:5,
+    marginTop:10,
+    alignSelf:"flex-end"
+  }
+
+
+})
+
 
 
  export default Enach;

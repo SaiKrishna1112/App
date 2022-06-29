@@ -18,7 +18,7 @@ const Registation  = props =>{
  const [usermobilenumber,setUsermobilenumber]=useState("");
  const [load, setLoad]=useState(false);
  const [userprimary, setUserPrimary]=useState("");
- const [userprimarytype, setUserPrimaryType]=useState("");
+ const [userprimarytype, setUserPrimaryType]=useState(props.route.params.primaryType);
  const [selectedValue, setSelectedValue] = useState("LENDER");
  const convertTextToUpperCase = () => {
     //To convert Upper Case
@@ -79,12 +79,12 @@ const Registation  = props =>{
               //console.log(response.data);
               setTimeout(function(){
                            setLoading(false);
-                           props.navigation.navigate('Otp1',{
+                           props.navigation.navigate('Part 1',{
                                mobiledata:response.data,
                                  username:username,
                                  useremail :useremail,
                                  userpassword:password,
-                                 userprimarytype:selectedValue
+                                 userprimarytype:userprimarytype
                            })
                        }, 3000);
                      })
@@ -112,14 +112,14 @@ const Registation  = props =>{
 
           <View style={styles.maintext}>
             <Text style={styles.text1}>Welcome to Oxyloans</Text>
-            <Text style={styles.text2}></Text>
+            <Text style={styles.text2}>Register As a {userprimarytype}</Text>
           </View>
        </View>
          <Animatable.View
          animation="fadeInUp"
          style={styles.backgd2}>
          <ScrollView>
-         <View style={{marginTop:25}}>
+         <View style={{marginTop:25,justifyContent:'center',alignSelf:'center'}}>
               <View style={styles.inputbox}>
                   <Text style={{fontSize:18}}>Name</Text>
                   <TextInput placeholder="NAME AS PER PANCARD"
@@ -154,16 +154,6 @@ const Registation  = props =>{
                   <Text style={{fontSize:18}}>Mobile Number</Text>
                   <TextInput placeholder="Mobile Number" keyboardType="numeric"
                   onChangeText={(number)=>setUsermobilenumber(number)}/>
-              </View>
-              <View style={styles.inputbox}>
-                <Text style={{fontSize:18}}>Primary Type</Text>
-                <Picker
-                 selectedValue={selectedValue}
-                 style={{ height: 40, width: 300,alignItems:"center",justifyContent:'center' }}
-                 onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}>
-               <Picker.Item label="LENDER" value="LENDER" />
-               <Picker.Item label="BORROWER" value="BORROWER" />
-               </Picker>
               </View>
               <AnimatedLoader
                visible={loading}

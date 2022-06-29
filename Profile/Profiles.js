@@ -1,8 +1,9 @@
-import  React,{useState,Component} from "react"
+import  React,{useState,Component,useEffect} from "react"
 import ExpandableView from '@pietile-native-kit/expandable-view';
 import {View,Text,StyleSheet,Image,Input,Button,TextInput,
  TouchableOpacity,ScrollView,Alert,Pressable,Platform,ActivityIndicator} from "react-native";
  import { MaterialCommunityIcons } from '@expo/vector-icons';
+ import Icon from 'react-native-vector-icons/Ionicons'
  import axios from "axios";
  import AnimatedLoader from "react-native-animated-loader";
 import DatePicker from '@react-native-community/datetimepicker';
@@ -10,10 +11,13 @@ import { SafeAreaView  } from 'react-native-safe-area-context';
 import { COLORS, SIZES } from '../src/constants/theme';
 import {useSelector} from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
-import {launchImageLibraryAsync} from 'expo-image-picker';
+import {launchCameraAsync, useCameraPermissions, PermissionStatus} from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import {FormData,File} from "formdata-node";
+
+import style from '../src/styles';
+
 
  const Profiles  = props =>{
   const userDetails = useSelector(state=>state.counter);
@@ -183,9 +187,12 @@ import {FormData,File} from "formdata-node";
  const [nomineebranchname,setnomineebranchname]=useState();
  const [nomineebankcity,setnomineebankcity]=useState();
  const [nomineeifscCode,setnomineeifscCode]=useState();
- const [panPic,setPanpic] = useState();
- const [chequePic,setChequePic] = useState();
- const [aadharpic,setAadharPic] = useState();
+ const [panPic,setPanpic] = useState("PAN Upload");
+ const [chequePic,setChequePic] = useState("Cheque Upload");
+ const [aadharpic,setAadharPic] = useState("Aadhar Upload");
+ const [voterPic,setvoterPic]=useState("VoterID Upload");
+ const [driving,setDrivingPic]=useState("Driving Licence Upload");
+ const [passportPic,setPassportPic]=useState("Passport Upload");
  ////////////////////  Bank Start ///////////////////////http://ec2-13-235-82-38.ap-south-1.compute.amazonaws.com:8080/oxyloans/v1/user/809/loan/BORROWER/updateLoanRequest
   function Verify() {
 
@@ -577,7 +584,7 @@ const panDocument = async () => {
        uri: uri,
        type: "application/" + fileType
      };
-     console.log(fileToUpload.name, '...............file')
+    // console.log(fileToUpload.name, '...............file')
      fd.append("PAN", fileToUpload);
   axios({
       method:'post',
@@ -589,7 +596,7 @@ const panDocument = async () => {
            }
      })
       .then(function (response) {
-       console.log(response);
+       //console.log(response);
        alert("Successfully Upload")
             })
       .catch(function (error) {
@@ -629,7 +636,7 @@ const chequeDocument = async () => {
        uri: uri,
        type: "application/" + fileType
      };
-     console.log(fileToUpload.name, '...............file')
+     //console.log(fileToUpload.name, '...............file')
      fd.append("CHEQUELEAF", fileToUpload);
   axios({
       method:'post',
@@ -641,7 +648,7 @@ const chequeDocument = async () => {
            }
      })
       .then(function (response) {
-       console.log(response);
+       //console.log(response);
        alert("Successfully Upload")
             })
       .catch(function (error) {
@@ -681,7 +688,7 @@ const aadharDocument = async () => {
        uri: uri,
        type: "application/" + fileType
      };
-     console.log(fileToUpload.name, '...............file')
+     //console.log(fileToUpload.name, '...............file')
      fd.append("AADHAR", fileToUpload);
   axios({
       method:'post',
@@ -693,7 +700,7 @@ const aadharDocument = async () => {
            }
      })
       .then(function (response) {
-       console.log(response);
+       //console.log(response);
        alert("Successfully Upload")
             })
       .catch(function (error) {
@@ -705,6 +712,222 @@ const aadharDocument = async () => {
  });
 }
 
+const voterDocument = async () => {
+    let result = await DocumentPicker.getDocumentAsync({
+   type: "*/*",
+   copyToCacheDirectory: true,
+   allowsEditing: false,
+   aspect: [4, 3],
+ })
+ .then(response => {
+   if (response.type == 'success') {
+     let { name, size, uri } = response;
+
+  // ------------------------/
+     if (Platform.OS === "android" && uri[0] === "/") {
+        uri = `file://${uri}`;
+        console.log(uri);
+        uri = uri.replace(/%/g, "%25");
+        console.log(uri);
+     }
+ // ------------------------/
+
+     let nameParts = name.split('.');
+     let fileType = nameParts[nameParts.length - 1];
+     var fileToUpload = {
+       name: name,
+       size: size,
+       uri: uri,
+       type: "application/" + fileType
+     };
+     //console.log(fileToUpload.name, '...............file')
+     fd.append("VOTERID", fileToUpload);
+  axios({
+      method:'post',
+      url:'http://ec2-13-235-82-38.ap-south-1.compute.amazonaws.com:8080/oxyloans/v1/user/'+id+'/upload/kyc',
+      data:fd,
+      headers:{
+            accessToken:access,
+            'Content-Type' :'multipart/form-data',
+           }
+     })
+      .then(function (response) {
+       //console.log(response);
+       alert("Successfully Upload")
+            })
+      .catch(function (error) {
+       console.log('error',error);
+       console.log(error.response.data.errorMessage);
+     });
+     setvoterPic(fileToUpload.name);
+   }
+ });
+}
+const drivingDocument = async () => {
+    let result = await DocumentPicker.getDocumentAsync({
+   type: "*/*",
+   copyToCacheDirectory: true,
+   allowsEditing: false,
+   aspect: [4, 3],
+ })
+ .then(response => {
+   if (response.type == 'success') {
+     let { name, size, uri } = response;
+
+  // ------------------------/
+     if (Platform.OS === "android" && uri[0] === "/") {
+        uri = `file://${uri}`;
+        console.log(uri);
+        uri = uri.replace(/%/g, "%25");
+        console.log(uri);
+     }
+ // ------------------------/
+
+     let nameParts = name.split('.');
+     let fileType = nameParts[nameParts.length - 1];
+     var fileToUpload = {
+       name: name,
+       size: size,
+       uri: uri,
+       type: "application/" + fileType
+     };
+     //console.log(fileToUpload.name, '...............file')
+     fd.append("DRIVINGLICENCE", fileToUpload);
+  axios({
+      method:'post',
+      url:'http://ec2-13-235-82-38.ap-south-1.compute.amazonaws.com:8080/oxyloans/v1/user/'+id+'/upload/kyc',
+      data:fd,
+      headers:{
+            accessToken:access,
+            'Content-Type' :'multipart/form-data',
+           }
+     })
+      .then(function (response) {
+       //console.log(response);
+       alert("Successfully Upload")
+            })
+      .catch(function (error) {
+       console.log('error',error);
+       console.log(error.response.data.errorMessage);
+     });
+     setDrivingPic(fileToUpload.name);
+   }
+ });
+}
+const passportDocument = async () => {
+    let result = await DocumentPicker.getDocumentAsync({
+   type: "*/*",
+   copyToCacheDirectory: true,
+   allowsEditing: false,
+   aspect: [4, 3],
+ })
+ .then(response => {
+   if (response.type == 'success') {
+     let { name, size, uri } = response;
+
+  // ------------------------/
+     if (Platform.OS === "android" && uri[0] === "/") {
+        uri = `file://${uri}`;
+        console.log(uri);
+        uri = uri.replace(/%/g, "%25");
+        console.log(uri);
+     }
+ // ------------------------/
+
+     let nameParts = name.split('.');
+     let fileType = nameParts[nameParts.length - 1];
+     var fileToUpload = {
+       name: name,
+       size: size,
+       uri: uri,
+       type: "application/" + fileType
+     };
+     //console.log(fileToUpload.name, '...............file')
+     fd.append("PASSPORT", fileToUpload);
+  axios({
+      method:'post',
+      url:'http://ec2-13-235-82-38.ap-south-1.compute.amazonaws.com:8080/oxyloans/v1/user/'+id+'/upload/kyc',
+      data:fd,
+      headers:{
+            accessToken:access,
+            'Content-Type' :'multipart/form-data',
+           }
+     })
+      .then(function (response) {
+       //console.log(response);
+       alert("Successfully Upload")
+            })
+      .catch(function (error) {
+       console.log('error',error);
+       console.log(error.response.data.errorMessage);
+     });
+     setPassportPic(fileToUpload.name);
+   }
+ });
+}
+////////---------------------------------get Profile---------------------------------
+
+const getpan=()=>{
+ axios({
+     method:'get',
+     url:'http://ec2-13-235-82-38.ap-south-1.compute.amazonaws.com:8080/oxyloans/v1/user/'+id+'/download/PAN',
+     headers:{
+           accessToken:access,
+          }
+    })
+     .then(function (response) {
+      //console.log(response.data);
+      setPanpic(response.data.fileName);
+           })
+     .catch(function (error) {
+      console.log('error',error);
+      console.log(error.response.data.errorMessage);
+    });
+
+}
+const getcheque=()=>{
+ axios({
+     method:'get',
+     url:'http://ec2-13-235-82-38.ap-south-1.compute.amazonaws.com:8080/oxyloans/v1/user/'+id+'/download/CHEQUELEAF',
+     headers:{
+           accessToken:access,
+          }
+    })
+     .then(function (response) {
+      //console.log(response.data);
+       setChequePic(response.data.fileName);
+           })
+     .catch(function (error) {
+      console.log('error',error);
+      console.log(error.response.data.errorMessage);
+    });
+
+}
+const getaadhar=()=>{
+ axios({
+     method:'get',
+     url:'http://ec2-13-235-82-38.ap-south-1.compute.amazonaws.com:8080/oxyloans/v1/user/'+id+'/download/AADHAR',
+     headers:{
+           accessToken:access,
+          }
+    })
+     .then(function (response) {
+      //console.log(response.data);
+       setAadharPic(response.data.fileName);
+           })
+     .catch(function (error) {
+      console.log('error',error);
+      Alert.alert(
+       'Oops',
+       'Please Check Network and Try again',
+       [
+         { text: "OK", onPress: () => setLoading(false)}
+       ]
+      )
+      console.log(error.response.data.errorMessage);
+    });
+
+}
 
 ///////////////////////Profile Pic/////////////////////////////
 
@@ -748,14 +971,116 @@ const { rightIcon, handlearrowVisibility } =
   setMode(currentMode);
  };
  //----------------DatePicker End-----------------//
+//-----------------------profile pic-------------------//
 
+ const [imageshow,setimageshow] = useState();
+ const [cameraPermissionInformation, requestPermission] = ImagePicker.useCameraPermissions();
+
+async function verifyPermissions() {
+ if (cameraPermissionInformation.status === PermissionStatus.UNDETERMINED){
+  const  permissionResponse = await requestPermission();
+
+  return permissionResponse.granted;
+ }
+ // if(cameraPermissionInformation.status === PermissionStatus.DENIED){
+ //  Alert.alert(
+ //   'Insufficient Permissions',
+ //  );
+ //  return true;
+ // }
+ return true;
+}
+ async function takeImageHandler() {
+ const hasPermission = await verifyPermissions();
+
+ if(!hasPermission){
+  return ;
+ }
+  const result = await launchCameraAsync({
+ type: "*/*",
+ allowsEditing: true,
+ copyToCacheDirectory: true,
+ aspect: [4, 3],
+});
+setimageshow(result.uri)
+var name=result.uri.split('file:///data/user/0/host.exp.exponent/cache/ExperienceData/%25407702443766%252FAppmobile/ImagePicker/')
+var imageset={
+ name:name[1],
+ uri: result.uri,
+ size:(result.height)+(result.width),
+ type: "application/jpg"
+}
+console.log(name[1]);
+console.log(imageset);
+  fd.append("PROFILEPIC", imageset);
+axios({
+   method:'post',
+   url:'http://ec2-13-235-82-38.ap-south-1.compute.amazonaws.com:8080/oxyloans/v1/user/'+id+'/upload/uploadProfilePic',
+   data:fd,
+   headers:{
+         accessToken:access,
+         'Content-Type' :'multipart/form-data',
+        }
+  })
+   .then(function (response) {
+    //console.log(response);
+    alert("Successfully Upload")
+         })
+   .catch(function (error) {
+    console.log('error',error);
+    alert("Not Upload ")
+  });
+ }
+
+//------------------------------profile Pic Get Call---------------------------------------------
+const getprofieshowss=()=>{
+ setLoading(true)
+ axios({
+     method:'get',
+     url:'http://ec2-13-235-82-38.ap-south-1.compute.amazonaws.com:8080/oxyloans/v1/user/'+id+'/download/PROFILEPIC',
+     headers:{
+           accessToken:access,
+          }
+    })
+     .then(function (response) {
+      //console.log(response.data.fileName);
+       setimageshow(response.data.downloadUrl);
+       setTimeout(function(){
+               setLoading(false);
+              },2000)
+           })
+     .catch(function (error) {
+      console.log('error',error);
+      console.log(error.response.data.errorMessage);
+    });
+
+}
+
+
+
+   let imagePreview = <Text style={{marginTop:120,alignSelf:'center',justifyContent:'center',color:'white'}}>NO Image taken yet.</Text>
+
+    if(imageshow) {
+     imagePreview = <Image source={{uri:imageshow }} style={styles.image}/>
+    }
+    useEffect(()=>{
+     getpan();
+     getcheque();
+     getaadhar();
+     getprofieshowss();
+
+    },[]);
 
   return(
      <View style={{marginBottom:2,alignSelf:'center'}}>
      <SafeAreaView>
      <ScrollView>
          <View>
-         <Image source={require('../assets/avatar.png')} style={{height:120,width:120,alignSelf:'center',bottom:1}}/>
+         <View style={{alignItems:'center',marginTop:10}}>
+   <TouchableOpacity onPress={takeImageHandler}>
+        <View style={styles.imagePreview}>{imagePreview}</View>
+     </TouchableOpacity>
+   </View>
          </View>
      <View style={{paddingTop:10}}>
      <View style={styles.field}>
@@ -1079,36 +1404,83 @@ const { rightIcon, handlearrowVisibility } =
  </View>
  <ExpandableView show={show6}>
  <ScrollView>
- <View>
- <Text style={{fontSize:15,marginTop:5}}>Pan Card</Text>
- <View style={{flexDirection:'row'}}>
-<TouchableOpacity style={styles.upload} onPress={panDocument}>
-<Text>Upload</Text></TouchableOpacity>
-<TextInput style={styles.input} value={panPic}/>
-</View>
-</View>
-<View>
-<Text style={{fontSize:15,marginTop:5}}>Cheque Leaf</Text>
-<View style={{flexDirection:'row'}}>
-<TouchableOpacity style={styles.upload} onPress={chequeDocument}>
-<Text>Upload</Text></TouchableOpacity>
-<TextInput style={styles.input} value={chequePic}/>
-</View>
-</View>
-<View>
-<Text style={{fontSize:15,marginTop:5}}>Aadhar Card</Text>
-<View style={{flexDirection:'row'}}>
-<TouchableOpacity style={styles.upload} onPress={aadharDocument}>
-<Text>Upload</Text></TouchableOpacity>
-<TextInput style={styles.input} value={aadharpic}/>
-</View>
-</View>
+ <TouchableOpacity onPress={panDocument}>
+    <View style={style.inputbox21}>
+        <Icon  size={20} style={{alignItems:'flex-start'}} name="cloud-upload"/>
+        <Text style={style.txt214}>{panPic}</Text>
+             <View style={style.btn21}>
+                <Text>Upload</Text>
+             </View>
+    </View>
+  </TouchableOpacity>
+
+
+  <TouchableOpacity onPress={chequeDocument}>
+    <View style={style.inputbox21}>
+        <Icon  size={20} style={{alignItems:'flex-start'}} name="cloud-upload"/>
+        <Text style={style.txt214}>{chequePic}</Text>
+           <View style={style.btn21}>
+             <Text>Upload</Text>
+           </View>
+    </View>
+  </TouchableOpacity>
+   <View style={{marginTop:10,marginBottom:10}}>
+      <Text style={{fontWeight:'bold',marginLeft:80}}>Upload Anyone in the following</Text>
+      <Text style={{fontWeight:'bold',marginLeft:52}}>Aadhar,voterID,Passport,Driving Licence</Text>
+   </View>
+  <TouchableOpacity onPress={aadharDocument}>
+    <View style={style.inputbox21}>
+        <Icon  size={20} style={{alignItems:'flex-start'}} name="cloud-upload"/>
+        <Text style={style.txt214}>{aadharpic}</Text>
+            <View style={style.btn21}>
+              <Text>Upload</Text>
+            </View>
+    </View>
+  </TouchableOpacity>
+
+  <TouchableOpacity onPress={voterDocument}>
+    <View style={style.inputbox21}>
+        <Icon  size={20} style={{alignItems:'flex-start'}} name="cloud-upload"/>
+        <Text style={style.txt214}>{voterPic}</Text>
+              <View style={style.btn21}>
+                    <Text>Upload</Text>
+              </View>
+    </View>
+  </TouchableOpacity>
+
+  <TouchableOpacity onPress={drivingDocument}>
+    <View style={style.inputbox21}>
+        <Icon  size={20} style={{alignItems:'flex-start'}} name="cloud-upload"/>
+        <Text style={style.txt214}>{driving}</Text>
+           <View style={style.btn21}>
+              <Text>Upload</Text>
+        </View>
+    </View>
+  </TouchableOpacity>
+
+  <TouchableOpacity onPress={passportDocument}>
+    <View style={style.inputbox21}>
+        <Icon  size={20} style={{alignItems:'flex-start'}} name="cloud-upload"/>
+        <Text style={style.txt214}>{passportPic}</Text>
+             <View style={style.btn21}>
+               <Text>Upload</Text>
+          </View>
+    </View>
+  </TouchableOpacity>
 </ScrollView>
  </ExpandableView>
  </View>
 
       </ScrollView>
       </SafeAreaView>
+      <AnimatedLoader
+       visible={loading}
+       overlayColor="rgba(255,255,255,0.75)"
+       source={require("../assets/loading-state.json")}
+       animationStyle={styles.lottie}
+       speed={1}>
+ <Text>Loading...</Text>
+</AnimatedLoader>
      </View>
   )
  }
@@ -1213,6 +1585,21 @@ const { rightIcon, handlearrowVisibility } =
           marginTop:15,
           marginLeft:12
           },
+          imagePreview:{
+   borderRadius:100,
+   width:200,
+   height:200,
+   backgroundColor:'black'
+  },
+  image:{
+   width:200,
+   height:200,
+   borderRadius:100
+  },
+  lottie: {
+    width: 100,
+    height: 100
+  },
     });
 
 export default Profiles;

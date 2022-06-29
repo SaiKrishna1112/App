@@ -13,7 +13,7 @@ import SingleDeal from './SingleDeal';
 const PersonalDeals = ({navigation}) => {
     const [deal,setDeal]=useState([])
     const userDetails = useSelector(state=>state.counter);
-//   const userDetail = useSelector(state=>state.logged);
+   const userDetail = useSelector(state=>state.logged);
     var access = userDetails.headers.accesstoken;
     var id = userDetails.data.id;
     var Data={ pageNo:1,pageSize:10,dealType:'HAPPENING',dealName: "PERSONAL"}
@@ -111,21 +111,7 @@ const ongoingDealfunction=param=>{
 
   return (
 
-    <SafeAreaView style={{paddingTop:20,flex:1,marginBottom:0}}>
-    <View style={{flexDirection:'row',marginTop:20}}>
-    <TouchableOpacity onPress={()=>navigation.navigate('LenderDrawer')} style={{alignSelf:'flex-start'}}>
-    <MaterialCommunityIcons style={{marginLeft:20,alignSelf:'center'}} name = "arrow-left-thick" color = 'black' size = { 35 }/>
-    </TouchableOpacity>
-    <Text style={{fontSize:22,fontWeight:'bold',alignItems:'center',justifyContent:'center',marginLeft:45}}>Personal Loans Deals</Text>
-    </View>
-      <View style={{margin:3}}>
-        <View style={{margin:5,flexDirection:'row',alignItems:'center',justifyContent:'center',padding:5}}>
-           <TouchableOpacity style={{backgroundColor:'#FF6347',borderRadius:3,height:28,width:180,alignItems:'center',justifyContent:'center'}}><Text style={{color:'white',fontWeight:"bold"}}>Running Deals</Text></TouchableOpacity>
-           <TouchableOpacity style={{backgroundColor:'#3090C7',borderRadius:3,height:28,width:180,alignItems:'center',justifyContent:'center',}}
-              onPress={()=>navigation.navigate('ParticpatedDeals')}><Text style={{color:'white',fontWeight:"bold"}}>Participated Deals</Text></TouchableOpacity>
-        </View>
-      </View>
-
+    <SafeAreaView style={{paddingTop:6,flex:1,marginBottom:0}}>
 
     <View style={{marginTop:4}}>
       <FlatList

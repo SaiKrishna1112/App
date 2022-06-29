@@ -88,6 +88,32 @@ const startResendOtpTimer = () => {
 //on click of resend button
 const onResendOtpButtonPress = () => {
     //clear input field
+    setLoading(true)
+    axios.post(local+'/sendOtp',
+     {
+        mobileNumber:usermobilenumber
+      })
+      .then(function (response) {
+       //console.log(response.data);
+       console.log(usermobilenumber);
+       setTimeout(function(){
+                     setLoading(false);
+                    props.navigation.navigate('Login With OTP',{
+                        usermobilenumber:usermobilenumber
+                    })
+                },2000);
+              })
+      .catch(function (error) {
+        console.log(error);
+        console.log(error.response);
+         Alert.alert(
+   "Warring",
+  // error.response.data.errorMessage,
+   [
+     { text: "OK", onPress: () => console.log("OK") }
+   ]
+ );
+     });
     setValue('')
     setResendButtonDisabledTime(RESEND_OTP_TIME_LIMIT);
     startResendOtpTimer();

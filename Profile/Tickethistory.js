@@ -75,12 +75,6 @@ const Tickethistory= ({navigation}) =>{
 
     return (
         <SafeAreaView style={{backgroundColor:"#CCD8E1",flex:5}}>
-        <View style={{flexDirection:'row',marginTop:30}}>
-        <TouchableOpacity onPress={()=>navigation.navigate('LenderDrawer')} style={{alignSelf:'flex-start'}}>
-        <MaterialCommunityIcons style={{marginLeft:20,alignSelf:'center'}} name = "arrow-left-thick" color = 'black' size = { 35 }/>
-        </TouchableOpacity>
-        <Text style={{fontSize:22,fontWeight:'bold',alignItems:'center',justifyContent:'center',marginLeft:85}}>Ticket History</Text>
-        </View>
         <View style={{marginTop:10}}>
         <FlatList
              data={history}

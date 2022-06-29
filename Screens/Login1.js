@@ -12,9 +12,9 @@ import { AccessToken,UserID } from '../src/action/index';
 
 const Login1 = para => {
  const dispatch = useDispatch();
- const [username,setUsername]=useState('saivicky2324@gmail.com');//product: sreejalabhishetty@gmail.com
+ const [username,setUsername]=useState()
  const [userpass,setuserpass]=useState('');
- const [primaryType,setprimaryType]=useState('');
+ const [primaryType,setprimaryType]=useState(para.route.params.primaryType);
  const[load, setLoad]=useState(false);
 const [loading, setLoading] = useState(false);
 const [accessToken,setAccessToken] = useState("");
@@ -22,7 +22,6 @@ const [userId,setUserId] = useState("");
 var userlogin=local;
 var prod='https://fintech.oxyloans.com/oxyloans/v1/user';
 var local='http://ec2-13-235-82-38.ap-south-1.compute.amazonaws.com:8080/oxyloans/v1/user';
-
 const useTogglePasswordVisibility = () => {
 const [passwordVisibility, setPasswordVisibility] = useState(true);
 const [rightIcon, setRightIcon] = useState('eye-off');
@@ -49,7 +48,17 @@ const [password, setPassword] = useState('Test@123');
 const setToastMsg=(msg) =>{
  ToastAndroid.showWithGravity(msg, ToastAndroid.SHORT, ToastAndroid.CENTER);
 }
+function fuction(){
+ if(para.route.params.primaryType=="LENDER"){
+  setUsername('savicky@gmail.com')
+ }else{
+  setUsername('saivicky2324@gmail.com')
+ }
+}
 
+useEffect(()=>{
+ fuction();
+},[]);
 const submitfunction= ()=>{
    if(username==""){
     setToastMsg('Please Enter Email');
@@ -83,14 +92,13 @@ const submitfunction= ()=>{
          });
       setTimeout(function(){
               setLoading(false);
-              setprimaryType(response.data.primaryType);
               //console.log(primaryType);
               if(response.data.primaryType=="LENDER"){
-               console.log("LENDER");
+               setToastMsg('LENDER');
                para.navigation.navigate('LenderDrawer')
               } else {
                para.navigation.navigate('BorrowerDrawer')
-               console.log("BORROWER");
+               setToastMsg('BORROWER');
               }
 
              },1000);
@@ -117,7 +125,7 @@ const submitfunction= ()=>{
             </View>
             <View style={styles.maintext}>
               <Text style={styles.text1}>Welcome to Oxyloans</Text>
-             <Text style={styles.text2}>Please Login with your email to continue with Oxyloans</Text>
+             <Text style={styles.text2}>Please Login with your email to continue with Oxyloans as {primaryType}</Text>
             </View>
         </View>
          <View
@@ -172,7 +180,7 @@ const submitfunction= ()=>{
                  </TouchableOpacity>
                   <Text style={{fontSize:16,fontWeight:'bold',alignSelf:'center',justifyContent:'center'}}>OR</Text>
                   <TouchableOpacity style={styles.appButtonContainer} onPress={()=>{
-                     para.navigation.push('Registation'); }}>
+                     para.navigation.push('Registration',{primaryType:primaryType}); }}>
                      <Text style={styles.appButtonText}>Register</Text>
                   </TouchableOpacity>
                   </ScrollView>

@@ -11,7 +11,6 @@ import { StyleSheet, Text, View,Button ,TextInput,FlatList,Modal,SafeAreaView,To
 const SingleDeal = ({route,navigation}) => {
   const [value, setValue] = useState("MONTHLY");
 
-  const [borrowerName,setBorrowerName]=useState('');
   const [dealName,setDealName]=useState('');
   const [DealAmount,setDealAmount]=useState('');
   const [tenure,setTenure]=useState('');
@@ -21,6 +20,9 @@ const SingleDeal = ({route,navigation}) => {
   const [groupname,setgroupname]=useState();
   const [amount,setAmount]=useState();
   const [roi,setroi]=useState();
+  const [mini,setmini]=useState();
+  const [maxi,setmaxi]=useState();
+  const [available,setavailable]=useState();
   const [groupid,setgroupid]=useState();
   const [loading,setloading]=useState();
 
@@ -38,8 +40,8 @@ const SingleDeal = ({route,navigation}) => {
                  })
 
         .then(function(response){
-            console.log(response.data);
-            setBorrowerName(response.data.borrowerName)
+            //console.log(response.data);
+
             setDealName(response.data.dealName)
             setDealAmount(response.data.dealAmount)
             setTenure(response.data.duration)
@@ -49,6 +51,9 @@ const SingleDeal = ({route,navigation}) => {
             setgroupname(response.data.groupName)
             setroi(response.data.rateOfInterest)
             setgroupid(response.data.groupId)
+            setmini(response.data.minimumPaticipationAmount)
+            setmaxi(response.data.lenderParticiptionLimit)
+            setavailable(response.data.remainingAmountInDeal)
         })
         .catch(function(error){
             console.log(error)
@@ -90,23 +95,31 @@ data,
         console.log(response.data);
         setTimeout(function(){
          setloading(false)
+         Alert.alert(
+          "Success",
+          "Successfully Participate in Deal",
+          [
+           { text: "OK", onPress: () => navigation.navigate('Participated Deals') }
+          ]
+         )
       },1000);
        })
        .catch(function(error){
            console.log(error)
+           Alert.alert(
+            "Oops",
+            "Something Went Wrong Please try After Sometime",
+            [
+             { text: "OK", onPress: () => setLoading(false) }
+            ]
+           )
        })
 
     }
 
 
   return (
-    <SafeAreaView style={{paddingTop:50,flex:1,marginBottom:10}}>
-    <View style={{flexDirection:'row',marginTop:5}}>
-    <TouchableOpacity onPress={()=>navigation.navigate('LenderDrawer')} style={{alignSelf:'flex-start'}}>
-    <MaterialCommunityIcons style={{marginLeft:20,alignSelf:'center'}} name = "arrow-left" color = 'black' size = { 35 }/>
-    </TouchableOpacity>
-     <Text style={{fontSize:18,marginLeft:10}}>Welcome to <Text style={{fontWeight:'bold',fontSize:18}}>{dealName}</Text> deal</Text>
-    </View>
+    <SafeAreaView style={{paddingTop:4,flex:1,marginBottom:10}}>
     <View style={{marginHorizontal:20}}>
 
     </View>
@@ -124,12 +137,12 @@ data,
                  <View style={styles.TxtView1}><Text style={styles.Txt2}>{dealName}</Text></View>
         </View>
         <View style={styles.flatmain}>
-                 <View style={styles.TxtView1}><Text style={styles.Txt1}>Deal Amount </Text></View>
+                 <View style={styles.TxtView1}><Text style={styles.Txt1}>Loan Amount </Text></View>
                  <View style={styles.TxtView1}><Text style={styles.Txt2}>{DealAmount}</Text></View>
         </View>
         <View style={styles.flatmain}>
-                 <View style={styles.TxtView1}><Text style={styles.Txt1}>Primary borrower </Text></View>
-                 <View style={styles.TxtView1}><Text style={styles.Txt2}>{borrowerName}</Text></View>
+                 <View style={styles.TxtView1}><Text style={styles.Txt1}>Available Limit </Text></View>
+                 <View style={styles.TxtView1}><Text style={styles.Txt2}>{available}</Text></View>
         </View>
         <View style={styles.flatmain}>
                  <View style={styles.TxtView1}><Text style={styles.Txt1}>Tenure in Months </Text></View>
@@ -144,7 +157,11 @@ data,
                  <View style={styles.TxtView1}><Text style={styles.Txt2}>{end}</Text></View>
         </View>
         <View style={styles.flatmain}>
-                 <View style={styles.TxtView1}><Text style={styles.Txt1}>Participation Limit </Text></View>
+                 <View style={styles.TxtView1}><Text style={styles.Txt1}>Minimum Participation </Text></View>
+                 <View style={styles.TxtView1}><Text style={styles.Txt2}>{mini}</Text></View>
+        </View>
+        <View style={styles.flatmain}>
+                 <View style={styles.TxtView1}><Text style={styles.Txt1}>Miximum Participation </Text></View>
                  <View style={styles.TxtView1}><Text style={styles.Txt2}>{participationLimit}</Text></View>
         </View>
     </View>
@@ -156,8 +173,9 @@ data,
       <Text style={{fontSize:18,margin:10}}>Your Participation to this deal is</Text>
 
       <View style={{flexDirection:'row'}}>
-      <TextInput style={{borderWidth:2,borderColor:'grey',marginLeft:30,width:230,alignSelf:'center'}}
-      placeholder="Enter Participation Amount" onChangeText={(number)=>setAmount(number)} keyboardType="numeric" maxLength={6}/>
+      <View style={{borderWidth:1}}>
+      <TextInput style={{borderColor:'grey',marginLeft:10,width:230,alignSelf:'center'}}
+      placeholder="Enter Participation Amount" onChangeText={(number)=>setAmount(number)} keyboardType="numeric" maxLength={8}/></View>
        <Icon name="alert-circle" size={29} style={{marginHorizontal:10}}/>
       </View>
     </View>
@@ -166,7 +184,7 @@ data,
     <View style={{marginHorizontal:18,alignItems:'center',backgroundColor:'#DCDCDC',paddingBottom:20,marginLeft:20}}>
     { groupname=='NEWLENDER' ?
     <View>
-        <View style={{backgroundColor:'#008EFF',paddingVertical:8,width:305,alignItems:'center',flexDirection:'row',justifyContent:'center'}}>
+        <View style={{backgroundColor:'#008EFF',paddingVertical:8,width:335,alignItems:'center',flexDirection:'row',justifyContent:'center'}}>
           <Text style={{fontSize:20,fontWeight:'bold',color:'white'}}>New Lender</Text>
           <Icon name="flash" size={22} style={{marginHorizontal:10,color:'#ffd700'}}/>
         </View>
@@ -201,7 +219,7 @@ data,
       </View>
                                :
      <View>
-        <View style={{backgroundColor:'#008EFF',paddingVertical:8,width:305,alignItems:'center',flexDirection:'row',justifyContent:'center'}}>
+        <View style={{backgroundColor:'#008EFF',paddingVertical:8,width:335,alignItems:'center',flexDirection:'row',justifyContent:'center'}}>
           <Text style={{fontSize:20,fontWeight:'bold',color:'white'}}>Oxy Premium</Text>
           <Icon name="flash" size={22} style={{marginHorizontal:10,color:'#ffd700'}}/>
         </View>
@@ -274,7 +292,7 @@ const styles = StyleSheet.create({
     },
 
     TxtView1:{
-        width:150,
+        width:170,
         borderColor:'grey',
         borderWidth:1,
         padding:5

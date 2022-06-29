@@ -22,11 +22,11 @@ const [loading, setLoading] = useState(false);
          mobileNumber:usermobilenumber
        })
        .then(function (response) {
-        console.log(response.data);
+        //console.log(response.data);
         console.log(usermobilenumber);
         setTimeout(function(){
                       setLoading(false);
-                     props.navigation.navigate('Otp2',{
+                     props.navigation.navigate('Login With OTP',{
                          usermobilenumber:usermobilenumber
                      })
                  },2000);

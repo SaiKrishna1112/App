@@ -1,242 +1,89 @@
-import React from "react";
-import {Image,StyleSheet,Text,View,TextInput,TouchableOpacity,
-KeyboardAvoidingView} from "react-native";
-import MapView from "react-native-maps";
- import Icon from 'react-native-vector-icons/Ionicons';
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-const latitudeDelta = 0.025;
-const longitudeDelta = 0.025;
-export default class Location extends React.Component<any, any> {
-searchText: any;
-mapView: any;
-state = {
-   region: {
-   latitudeDelta,
-   longitudeDelta,
-   latitude: 12.840575,
-   longitude: 77.651787,
-  },
-   listViewDisplayed: true,
-   address: "",
-   showAddress: false,
-   search: "",
-   currentLat: "",
-   currentLng: "",
-   forceRefresh: 0,
- };
-goToInitialLocation = (region) => {
-     let initialRegion = Object.assign({}, region);
-     initialRegion["latitudeDelta"] = 0.005;
-     initialRegion["longitudeDelta"] = 0.005;
-   this.mapView.animateToRegion(initialRegion, 2000);
-};
-onRegionChange = (region) => {
-    this.setState({
-      region: region,
-      forceRefresh: Math.floor(Math.random() * 100),
-      },
-     this.getCurrentAddress//callback
-     );
-   };
-componentWillMount() {
-   this.getCurrentAddress;
-  }
-// getAddress({
-//     get("https://maps.googleapis.com/maps/api/geocode/json?     address=" + this.state.region.latitude+"," +this.state.region.longitude +"&key=" + <YOUR_GOOGLE_API_KEY>).then((response) => response.json()).then((responseJson) => {
-//   console.log("ADDRESS GEOCODE is BACK!! => " +
-// JSON.stringify(responseJson));
-//    this.setState(
-//      { address:         JSON.stringify(responseJson.results[0].formatted_address)
-//       .replace(/"/g, "")
-//      });
-//    });
-render() {
-   const { region } = this.state;
+import {useState,useEffect} from 'react'
+import {View,Button,StyleSheet,Alert,Text,Image} from 'react-native'
+import { useNavigation,useRoute,useIsFocused} from '@react-navigation/native';
+import { getCurrentPositionAsync, useForegroundPermissions,PermissionStatus } from 'expo-location'
+function LocationPicker(){
+  const [pickedLocation,setPickedLoacation] = useState();
+  const isFocused = useIsFocused();
 
-   return (
-     <View style={styles.map}>
-       <MapView
-         ref={(ref) => (this.mapView = ref)}
-         onMapReady={() =>
-         this.goToInitialLocation(this.state.region)}
-         style={styles.map}
-         initialRegion={this.state.region}
-         onRegionChangeComplete={this.onRegionChange}
-       />
-    <View style={styles.panel}>
-       <View style={[styles.panelHeader,
-    this.state.listViewDisplayed? styles.panelFill:styles.panel,]}>
-   <GooglePlacesAutocomplete
-    currentLocation={false}
-    enableHighAccuracyLocation={true}
-    ref={(c) => (this.searchText = c)}
-    placeholder="Search for a location"
-    minLength={2} // minimum length of text to search
-    autoFocus={false}
-    returnKeyType={"search"}
-    listViewDisplayed={this.state.listViewDisplayed}
-    fetchDetails={true}
-    renderDescription={(row) => row.description}
-    enablePoweredByContainer={false}
-    listUnderlayColor="lightgrey"
-    onPress={(data, details) => {
-          this.setState({
-               listViewDisplayed: false,
-               address: data.description,
-               currentLat: details.geometry.location.lat,
-               currentLng: details.geometry.location.lng,
-               region: {
-                 latitudeDelta,
-                 longitudeDelta,
-                 latitude: details.geometry.location.lat,
-                 longitude:details.geometry.location.lng,
-                       },
-          });
-        this.searchText.setAddressText("");
-        this.goToInitialLocation(this.state.region);}}
-    textInputProps={{
-       onChangeText: (text) => {
-          console.log(text);
-          this.setState({listViewDisplayed: true});
-          },
-      }}
-    getDefaultValue={() => {
-         return ""; // text input default value
-      }}
-    query={{
-         key: "<YOUR_API_KEY>",
-         language: "en", // language of the results
-         components: "country:ind",
-        }}
-   styles={{
-      description: {
-         fontFamily: "Calibri",
-         color: "black",
-         fontSize: 12,
-       },
-   predefinedPlacesDescription: {
-       color: "black",
-       },
-   listView: {
-     position: "absolute",
-     marginTop: 44,
-     backgroundColor:"white",
-     borderBottomEndRadius: 15,
-     elevation:2,},}}
-   nearbyPlacesAPI="GooglePlacesSearch"
-   GooglePlacesSearchQuery={{
-       rankby: "distance",
-       types: "building",}}
-   filterReverseGeocodingByTypes={[
-       "locality","administrative_area_level_3",]}
-   debounce={200}/>
+  const navigation = useNavigation();
+  const route = useRoute();
+  const [locationPermissionInformation, requestPermission] = useForegroundPermissions();
+
+   useEffect(()=>{
+    if(isFocused &&  route.params){
+     const mapPickedLocation =  {
+      lat: route.params.pickedLat, lng: route.params.pickedlng
+     };
+     setPickedLoacation(mapPickedLocation)
+    }
+   },[route, isFocused])
+   console.log(pickedLocation);
+    async function verifyPermissions() {
+ if (locationPermissionInformation.status === PermissionStatus.UNDETERMINED){
+  const  permissionResponse = await requestPermission();
+
+  return permissionResponse.granted;
+ }
+ if(locationPermissionInformation.status === PermissionStatus.DENIED){
+  Alert.alert(
+   'Insufficient Permissions',
+  );
+  return false;
+ }
+ return true;
+}
+
+  async function getLocationHandler() {
+   const hasPermission = await verifyPermissions();
+
+   if(!hasPermission){
+    return ;
+   }
+    const location = await getCurrentPositionAsync();
+    console.log(location);
+    setPickedLoacation({
+     lat: location.coords.latitude,
+     lng: location.coords.longitude
+    })
+  }
+  function pickOnMapHandler(){
+    navigation.navigate('Maps');
+  }
+
+  let locationPreview = <Text style={{alignSelf:'center',marginTop:40}}>No Location Picked Yet.</Text>
+
+     if (pickedLocation) {
+      locationPreview =  (
+       <View style={{marginTop:50,marginLeft:10}}>
+         <Text style={{fontWeight:'bold'}}>Latitude: {pickedLocation.lat},Longitude: {pickedLocation.lng}</Text>
+         </View>
+     //   <Image source={{uri: getMapPreview(pickedLocation.lat ,pickedLocation.lng)}} style={styles.image} />
+      );
+     }
+ return(
+  <View>
+<View style={styles.mapPreview}>
+  {locationPreview}
 </View>
+<View style={{flexDirection:'row',justifyContent:'space-around'}}>
+<Button title="Locate User" onPress={getLocationHandler}/>
+<Button title="Pick on Map" onPress={pickOnMapHandler}/>
 </View>
-<View style={styles.markerFixed}>
-<Image
-  style={styles.marker}
-  source={require("../assets/pinmarker.png")}/>
-</View>
-<KeyboardAvoidingView style={styles.footer}>
-  <View style={{ flexDirection: "row", margin: 10 }}>
-     <Icon name="ios-home"
-      size={24}
-      color="#DC2B6B"
-      type="ionicon"
-      style={{
-        padding: 10,
-      }}
-     />
-    <Text style={styles.addressText}>Address</Text>
   </View>
-<TextInput
-  multiline={true}
-  clearButtonMode="while-editing"
-  style={{
-    marginBottom: 5,
-    width: "90%",
-    minHeight: 70,
-    alignSelf: "center",
-    borderColor: "lightgrey",
-    borderWidth: 1.5,
-    fontSize: 12,
-    borderRadius: 5,
-    flex: 0.5,
-    alignContent: "flex-start",
-    textAlignVertical: "top",
-    fontFamily: "Calibri",
-    }}
-  onChangeText={(text) =>this.setState({ address: text })}
-  value={this.state.address}
-/>
-  <TouchableOpacity
-   onPress={() => {}}
-   style={{
-    width: "30%",
-    alignSelf: "center",
-    alignItems: "center",
-    backgroundColor: "lightgreen",
-    borderRadius: 16.5,
-    shadowColor: "rgba(0,0,0, .4)", // IOS
-    shadowOffset: { height: 1, width: 1 }, // IOS
-    shadowOpacity: 1, // IOS
-    shadowRadius: 1, //IOS
-    elevation: 2, // Android
-    }}>
-        <Text
-           style={{
-           color: "white",
-           fontFamily: "Calibri",
-           fontSize: 12,
-           paddingVertical: 4,
-        }}>
-           SAVE
-       </Text>
-  </TouchableOpacity>
- </KeyboardAvoidingView>
-</View>
-)
+
+ )
 }
-}
+export default LocationPicker;
+
 const styles = StyleSheet.create({
-map:{
-  flex:1
-  },
-markerFixed: {
-  left: "50%",
-  marginLeft: -24,
-  marginTop: -48,
-  position: "absolute",
-  top: "50%",
-  },
-addressText: {
-  color: "black",
-  margin: 3,
-  fontFamily: "Calibri",
-},
-footer: {
-  backgroundColor: "white",
-  bottom: 0,
-  position: "absolute",
-  width: "100%",
-  height: "30%",
-},
-panelFill: {
- position: "absolute",
- top: 0,
- alignSelf: "stretch",
- right: 0,
- left: 0,
-},
-panel: {
- position: "absolute",
- top: 0,
- alignSelf: "stretch",
- right: 0,
- left: 0,
- flex: 1,
-},
-panelHeader: {
-//add custom header
-},
-});
+ mapPreview:{
+  width:300,
+  height:100,
+  marginLeft:35
+ },
+ image:{
+  width:300,
+  height:100,
+ }
+})

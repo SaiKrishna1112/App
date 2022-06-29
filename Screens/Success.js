@@ -5,13 +5,14 @@ import { Asset } from 'expo-asset';
 const Success = props =>{
   const GetPreviousData=props.route.params;
   var username=GetPreviousData.username;
+  var primaryType=GetPreviousData.primaryType;
   return (
         <View style={styles.container}>
             <View style={styles.logo}>
               <Image source={require('../assets/verifiedImage.png')} style={styles.img} />
             </View>
             <View>
-            <Text style={styles.text}> You have Successfullly Registred <Text style={{alignSelf:'center',justifyContent:'center'}}>{username}</Text></Text></View>
+            <Text style={styles.text}> You have Successfully Registred has a {primaryType} <Text style={{alignSelf:'center',justifyContent:'center'}}>{username}</Text></Text></View>
             <View style={styles.bottom}>
             <TouchableOpacity style={styles.appButtonContainer}
             onPress={()=>{

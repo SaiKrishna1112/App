@@ -94,7 +94,7 @@ const myclosedDealfunction=param=>{
                <Text>{item.fundingStatus}</Text>
             </View>
             <View style={{alignItems:'center',justifyContent:'center',padding:14}}>
-            <TouchableOpacity style={{backgroundColor:'#6495ED',borderRadius:3,height:28,width:180,alignItems:'center',justifyContent:'center',}}>
+            <TouchableOpacity onPress={()=>navigation.navigate('View Lenders',{id:item.dealId})} style={{backgroundColor:'#6495ED',borderRadius:3,height:28,width:180,alignItems:'center',justifyContent:'center',}}>
             <Text style={{color:'white',fontWeight:"bold"}}>VIEW LENDERS</Text>
             </TouchableOpacity>
             </View>
@@ -111,21 +111,7 @@ const myclosedDealfunction=param=>{
 
   return (
 
-    <SafeAreaView style={{paddingTop:20,flex:1,marginBottom:0}}>
-    <View style={{flexDirection:'row',marginTop:20}}>
-    <TouchableOpacity onPress={()=>navigation.navigate('LenderDrawer')} style={{alignSelf:'flex-start'}}>
-    <MaterialCommunityIcons style={{marginLeft:20,alignSelf:'center'}} name = "arrow-left-thick" color = 'black' size = { 35 }/>
-    </TouchableOpacity>
-    <Text style={{fontSize:22,fontWeight:'bold',alignItems:'center',justifyContent:'center',marginLeft:85}}>Closed Deals</Text>
-    </View>
-      <View style={{margin:15}}>
-
-        <View style={{margin:5,flexDirection:'row',alignItems:'center',justifyContent:'center',padding:5}}>
-           <TouchableOpacity style={{backgroundColor:'#FF6347',borderRadius:3,height:28,width:180,alignItems:'center',justifyContent:'center'}}><Text style={{color:'white',fontWeight:"bold"}}>Running Deals</Text></TouchableOpacity>
-           <TouchableOpacity style={{backgroundColor:'#3090C7',borderRadius:3,height:28,width:180,alignItems:'center',justifyContent:'center',}}
-              onPress={()=>navigation.navigate(ParticpatedDeals)}><Text style={{color:'white',fontWeight:"bold"}}>Participated Deals</Text></TouchableOpacity>
-        </View>
-      </View>
+    <SafeAreaView style={{paddingTop:10,flex:1,marginBottom:0}}>
 
 
     {/* <View> */}

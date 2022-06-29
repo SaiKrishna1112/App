@@ -64,12 +64,6 @@ const WithdrawalNormalDeal=({route,navigation})=>{
     }
 return(
 <View style={{marginTop:25}}>
-<View style={{flexDirection:'row',marginTop:25}}>
-<TouchableOpacity onPress={()=>navigation.navigate('Withdrawal')} style={{alignSelf:'flex-start'}}>
-<MaterialCommunityIcons style={{marginLeft:20,alignSelf:'center'}} name = "arrow-left-thick" color = 'black' size = { 35 }/>
-</TouchableOpacity>
-<Text style={{fontSize:22,fontWeight:'bold',alignSelf:'center',marginLeft:60}}>WITHDRAW</Text>
-</View>
 <View style={styles.container1}>
 <View style={styles.inputbox}>
  <Text style={{fontSize:18}}>Deal Name:</Text>

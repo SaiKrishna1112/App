@@ -1,10 +1,10 @@
 import  React,{useState} from "react";
 import {View,Text,StyleSheet,SafeAreaView,Image,TextInput,Button,TouchableNativeFeedback} from "react-native";
 
-const Openpage = para=>{
+const Openpage = ({navigation})=>{
    return(
      <TouchableNativeFeedback onPress={()=>{
-         para.navigation.push('LoansType'); }}>
+         navigation.push('Primary Type'); }}>
            <View style={styles.container}>
              <View>
                <View style={styles.logo}>

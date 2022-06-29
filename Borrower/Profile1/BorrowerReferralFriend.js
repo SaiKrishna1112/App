@@ -4,15 +4,18 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
 
 
-import { Text, View , StyleSheet ,TextInput,TouchableOpacity,Alert,ScrollView} from 'react-native';
+import { Text, View , StyleSheet ,TextInput,TouchableOpacity,Alert,ScrollView,Share} from 'react-native';
 import {useSelector} from "react-redux";
 import {Picker} from "@react-native-picker/picker";
 
 
 const BorrowerReferralFriend=({navigation})=>{
     const userDetails =useSelector(state=>state.counter);
+    const userDetail = useSelector(state=>state.logged);
     var access = userDetails.headers.accesstoken;
    var id = userDetails.data.id;
+   var userId= userDetail.userDisplayId;
+   alert(userId);
     const[fname,setfname]=useState("");
     const[email,setfemail]=useState("");
     const[number,setfnumber]=useState("");
@@ -92,15 +95,50 @@ const invitefunction=props=>{
      }
 
 var fullemailcontent=mailContent+'\n'+bottomOfTheMail;
+
+const onShare = async () => {
+   try {
+     const result = await Share.share({
+       message:
+         'http://182.18.139.198/new/register_borrower?ref='+userId,
+     });
+     if (result.action === Share.sharedAction) {
+       if (result.activityType) {
+         // shared with activity type of result.activityType
+       } else {
+         // shared
+       }
+     } else if (result.action === Share.dismissedAction) {
+       // dismissed
+     }
+   } catch (error) {
+     alert(error.message);
+   }
+ };
+ const onShares = async () => {
+    try {
+      const result = await Share.share({
+        message:
+          'http://182.18.139.198/new/register_lender?ref='+userId,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
     return(
 <View style={styles.container}>
 <View style={{alignSelf:'center'}}>
 <ScrollView>
     <View style={styles.cont}>
-      <View style={{flexDirection:'row',width:350,marginBottom:8,marginTop:10}}>
-      <TouchableOpacity onPress={()=>{navigation.navigate('BorrowerDrawer')}}>
-       <Icon name="arrow-back" color="#4F8EF7" size={30}/></TouchableOpacity>
-        <Text style={{fontSize:22,fontWeight:"bold",alignSelf:'flex-end',marginLeft:30}}> Refer a Friend & Earn  </Text></View>
         <Text style={styles.text}><Icon name="arrow-forward" color="#4F8EF7" size={20}/>  Let us grow as a family, while you are lending money through OXYLOANS, we ourselves a back-up in life for each other in all kinds of times.
         </Text>
         <Text style={styles.text}><Icon name="arrow-forward" color="#4F8EF7" size={20}/>  Every time your friend lends money, He / She will earn interest and you will earn a Reference Fee as shown below: Example: You Referred XYZ || XYZ joined the platform and lent INR 3,00,000.
@@ -109,6 +147,18 @@ var fullemailcontent=mailContent+'\n'+bottomOfTheMail;
         </Text>
     </View>
     <View style={styles.cont1}>
+    <TouchableOpacity onPress={onShare}>
+    <View style={{marginTop:5,marginLeft:250,flexDirection:'row',borderWidth:1,backgroundColor:'#00ffff'}}>
+       <Icon name="share-social" label="Borrower" size={18}/>
+       <Text style={{fontWeight:'bold'}}>Borrower</Text>
+    </View>
+    </TouchableOpacity>
+    <TouchableOpacity onPress={onShares}>
+    <View style={{marginTop:5,marginLeft:250,flexDirection:'row',borderWidth:1,backgroundColor:'#bdb76b'}}>
+       <Icon name="share-social" label="Borrower" size={18}/>
+       <Text style={{fontWeight:'bold'}}>Lender</Text>
+    </View>
+    </TouchableOpacity>
         <ScrollView>
         <Text style={styles.txt1}>Invite Friends/Professionals </Text>
                 <View style={styles.inputbox}>
@@ -185,7 +235,7 @@ const styles=StyleSheet.create({
     elevation: 5,
     borderRadius: 5,
     backgroundColor: '#FFFFFF',
-    marginTop:50,
+    marginTop:10,
     width:360,
     marginLeft:10,
     },

@@ -16,27 +16,22 @@ import * as Permissions from 'expo-permissions';
 
 import Login1 from './Screens/Login1';
 import Login2 from './Screens/Login2';
-import LoansType from './Screens/LoansType';
 import Registation from './Screens/Registation';
 import ViewLoginData from './Screens/ViewLoginData';
-import Adv from './Screens/Adv';
 import Openpage from './Screens/Openpage';
 import Otp1 from './Screens/Otp1';
 import Otp2 from './Screens/Otp2';
 import Messagespage from './Screens/Messagespage';
 import Success from "./Screens/Success";
-import Imagess from './Screens/Imagess';
 import Details from './Screens/Details';
 import Support from './Profile/Support';
 import WalletSuccess from './Profile/WalletSuccess';
 import ReferralFriend from './Profile/ReferralFriend';
-import GPRS from './Profile/Location';
-import Docu from './Screens/Docu';
-import Contactsss from './Profile/Contact12';
 import Tickethistory from './Profile/Tickethistory';
 import OngoingDeals from './Profile/OngoingDeals';
 import ParticpatedDeals from './Profile/ParticpatedDeals';
 import ViewStatement from './Profile/ViewStatement';
+import ViewLenders from './Profile/Viewlenders';
 import MyClosedDeals from './Profile/MyClosedDeals';
 import SingleDeal from './Profile/SingleDeal';
 import Withdrawal from './Profile/Withdrawal';
@@ -45,13 +40,21 @@ import Withdrawalfromwallet from './Profile/Withdrawalfromwallet';
 import PersonalDeals from './Profile/PersonalDeals';
 import Withdrawalhistory from './Profile/Withdrawalhistory';
 import EmiCalculator from './Profile/EmiCalculator';
+import MappingUsers from './Profile/MappingUsers';
+import EarningCertificate from './Profile/EarningCertificate';
 import LenderReferralStatus from './Profile/LenderReferralStatus';
+import ParticipateDetails from './Profile/ParticipateDetails';
 import BorrowerReferralFriend from './Borrower/Profile1/BorrowerReferralFriend';
 import BorrowerReferralStatus from './Borrower/Profile1/BorrowerReferralStatus';
+import BorrowerSupport from './Borrower/Profile1/BorrowerSupport';
+import BorrowerTickethistory from './Borrower/Profile1/BorrowerTickethistory';
 import MyloanRequest from './Borrower/Profile1/MyloanRequest';
 import AcceptedLoans from './Borrower/Profile1/AcceptedLoans';
+import AgreedLoans from './Borrower/Profile1/AgreedLoans';
 import Enach from './Borrower/Profile1/enach';
 import AcceptedOffer from './Borrower/Profile1/AcceptedOffer';
+import Location from './Borrower/Profile1/Location';
+import Maps from './Borrower/Profile1/Maps';
 import Login from './Screens/Login';
 import Registration from './Screens/Registration';
 import Generating from './Tabs/Generating';
@@ -60,7 +63,6 @@ import Inviting from './Tabs/Inviting';
 import NumberVerify from './Tabs/NumberVerify';
 import ReferralStatus from './Tabs/ReferralStatus';
 import NeoBank from './Tabs/NeoBank';
-//import Download from './Tabs/Downloads';
 import bgm from './src/Images/bgm.jpg';
 import MaintabScreen from './Screens1/MaintabScreen';
 import BorrowerMaintabScreen from './Borrower/BorrowerMaintabScreen';
@@ -203,50 +205,52 @@ function PartnerDrawer(){
      <NavigationContainer >
         <Stack.Navigator initialRouteName = "Openpage"
         screenOptions = {{
-                headerTintColor: 'red',
+                headerTintColor: 'black',
                 headerTitleStyle: styles.headerTitleStyle,
                 headerMode: 'float',
-                headerShown: false}}>
-        <Stack.Screen name = "OxyLoans" component = { Openpage }/>
-        <Stack.Screen name = "LoansType" component = { LoansType } />
-        <Stack.Screen name = "Adv"component = { Adv }/>
-        <Stack.Screen name = "Login1" component = { Login1 }/>
-        <Stack.Screen name = "Login2" component = { Login2 }/>
-        <Stack.Screen name = "Login" component = { Login }/>
-        <Stack.Screen name = "Registration" component = { Registration }/>
-        <Stack.Screen name = "ViewLoginData" component = { ViewLoginData }/>
-        <Stack.Screen name = "Registation" component = { Registation }/>
-        <Stack.Screen name = "Otp1" component = { Otp1 }/>
-        <Stack.Screen name = "Messagespage"component = { Messagespage }/>
-        <Stack.Screen name = "Success"component = { Success }/>
-        <Stack.Screen name = "Otp2"component = { Otp2 }/>
-        <Stack.Screen name = "Imagess"component = { Imagess }/>
-        <Stack.Screen name = "Details"component = { Details }/>
+                headerShown: true}}>
+        <Stack.Screen name = "OxyLoans" component = { Openpage } options={{headerShown: false}}/>
+        <Stack.Screen name = "Login1" component = { Login1 } options={{headerShown: false}}/>
+        <Stack.Screen name = "Login2" component = { Login2 } options={{headerShown: false}}/>
+        <Stack.Screen name = "Login" component = { Login } options={{headerShown: false}}/>
+        <Stack.Screen name = "Primary Type" component = { Registration } options={{headerShown: false}}/>
+        <Stack.Screen name = "ViewLoginData" component = { ViewLoginData } options={{headerShown: false}}/>
+        <Stack.Screen name = "Registration" component = { Registation }/>
+        <Stack.Screen name = "Part 1" component = { Otp1 } options={{headerShown: false}}/>
+        <Stack.Screen name = "Part 2"component = { Messagespage } options={{headerShown: false}}/>
+        <Stack.Screen name = "Success"component = { Success } options={{headerShown: false}}/>
+        <Stack.Screen name = "Login With OTP"component = { Otp2 } options={{headerShown: false}}/>
         <Stack.Screen name = "Support" component = { Support }/>
         <Stack.Screen name = "ReferralFriend" component = { ReferralFriend } />
         <Stack.Screen name = "LenderReferralStatus" component = { LenderReferralStatus } />
         <Stack.Screen name = "WalletSuccess" component = { WalletSuccess } />
-        <Stack.Screen name = "Docu" component = { Docu } />
-        <Stack.Screen name = "GPRS" component = { GPRS } />
-        <Stack.Screen name = "Contact12" component = { Contactsss } />
         <Stack.Screen name = "Tickethistory" component = { Tickethistory } />
-        <Stack.Screen name = "OngoingDeals" component = { OngoingDeals } />
-        <Stack.Screen name = "ParticpatedDeals" component = { ParticpatedDeals } />
+        <Stack.Screen name = "Running Deals" component = { OngoingDeals } />
+        <Stack.Screen name = "Participated Deals" component = { ParticpatedDeals } />
         <Stack.Screen name = "ViewStatement" component = { ViewStatement } />
-        <Stack.Screen name = "MyClosedDeals" component = { MyClosedDeals } />
+        <Stack.Screen name = "View Lenders" component = { ViewLenders } />
+        <Stack.Screen name = "Closed Deals" component = { MyClosedDeals } />
         <Stack.Screen name = "SingleDeal"  component = { SingleDeal } />
         <Stack.Screen name = "Withdrawal" component = { Withdrawal } />
         <Stack.Screen name = "EmiCalculator" component = { EmiCalculator } />
+        <Stack.Screen name = "Mapped Users" component = { MappingUsers } />
+        <Stack.Screen name = "Earning Certificate" component = { EarningCertificate } />
         <Stack.Screen name = "WithdrawalNormalDeal" component = { WithdrawalNormalDeal } />
         <Stack.Screen name = "Withdrawalfromwallet" component = { Withdrawalfromwallet } />
         <Stack.Screen name = "Withdrawalhistory" component = { Withdrawalhistory } />
+        <Stack.Screen name = "Participate Details" component = { ParticipateDetails } />
         <Stack.Screen name = "PersonalDeals" component = { PersonalDeals } />
         <Stack.Screen name = "BorrowerReferralFriend" component = { BorrowerReferralFriend } />
         <Stack.Screen name = "BorrowerReferralStatus" component = { BorrowerReferralStatus } />
+        <Stack.Screen name = "Write To Us" component = { BorrowerSupport } />
+        <Stack.Screen name = "Ticket History" component = { BorrowerTickethistory } />
         <Stack.Screen name = "MyloanRequest" component = { MyloanRequest } />
+        <Stack.Screen name = "AgreedLoans" component = { AgreedLoans } />
         <Stack.Screen name = "Enach" component = { Enach } />
         <Stack.Screen name = "AcceptedLoans" component = { AcceptedLoans } />
         <Stack.Screen name = "AcceptedOffer" component = { AcceptedOffer } />
+        <Stack.Screen name = "Location" component = { Location } />
+        <Stack.Screen name = "Maps" component = { Maps } />
         <Stack.Screen name = "Inviting" component = { Inviting } />
         <Stack.Screen name = "BankVerify" component = { BankVerify } />
         <Stack.Screen name = "Generating" component = { Generating } />
@@ -254,9 +258,9 @@ function PartnerDrawer(){
         <Stack.Screen name = "ReferralStatus" component = { ReferralStatus } />
         <Stack.Screen name = "NeoBank" component = { NeoBank } />
 
-        <Drawer.Screen name = "LenderDrawer" component = { LenderDrawer } />
-        <Drawer.Screen name = "BorrowerDrawer" component = { BorrowerDrawer }/>
-        <Drawer.Screen name = "PartnerDrawer" component = { PartnerDrawer }/>
+        <Drawer.Screen name = "LenderDrawer" component = { LenderDrawer }  options={{headerShown: false}}/>
+        <Drawer.Screen name = "BorrowerDrawer" component = { BorrowerDrawer } options={{headerShown: false}}/>
+        <Drawer.Screen name = "PartnerDrawer" component = { PartnerDrawer } options={{headerShown: false}}/>
         </Stack.Navigator>
         </NavigationContainer>
         </Provider>

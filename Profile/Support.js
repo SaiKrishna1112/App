@@ -144,9 +144,6 @@ const Support=props=>{
 
     return(
         <View style={styles.container}>
-
-        <Image source={{uri:"https://media.istockphoto.com/vectors/-vector-id1391424655?k=20&m=1391424655&s=612x612&w=0&h=JNX4qAmnYaxURUMA1buwP8IPlMDIjlP7kbfHMzm-vYI="}}
-               style={styles.img} />
         <ScrollView>
         <View style={styles.cont}>
            <Text style={styles.txt}>Contact Us</Text>
@@ -184,7 +181,7 @@ const styles = StyleSheet.create({
     //   justifyContent: 'center',
     },
     img:{
-        marginTop:50,
+        marginTop:30,
       height:200,
       width:240
     },
@@ -223,6 +220,7 @@ const styles = StyleSheet.create({
         marginRight:20,
         marginTop:5,
         textAlignVertical: 'top',
+        padding:10
     },
 
     btn:{

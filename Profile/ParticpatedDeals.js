@@ -6,6 +6,8 @@ import {MaterialCommunityIcons} from '@expo/vector-icons';
 import { StyleSheet, Text, View,Button ,TextInput,FlatList,Modal,SafeAreaView,TouchableOpacity} from 'react-native';
 
 import ViewStatement from './ViewStatement';
+import SingleDeal from './SingleDeal';
+
 
 const ParticpatedDeals = ({navigation}) => {
     const [Participated,setParticipated]=useState([])
@@ -40,7 +42,6 @@ const ParticpatedDeals = ({navigation}) => {
                  <View style={styles.flatmain}>
                  <View style={styles.TxtView1}><Text style={styles.Txt1}>Deal Name</Text></View>
                  <View><Text style={styles.Txt2}>{item.dealName}</Text></View>
-
                  </View>
 
                  <View style={styles.flatmain}>
@@ -91,25 +92,21 @@ const ParticpatedDeals = ({navigation}) => {
                  <View style={{alignItems:'center',justifyContent:'center',padding:14,borderBottomColor:'grey',borderBottomWidth:1,}}>
 
                  <TouchableOpacity style={{backgroundColor:'#569F40',borderRadius:3,height:28,width:180,alignItems:'center',justifyContent:'center',}}
-                    onPress={()=>alert(item.dealId)}><Text style={{color:'white',fontWeight:"bold"}}>Participate details</Text></TouchableOpacity>
+                    onPress={()=>navigation.navigate('Participate Details',{id:item.dealId})}><Text style={{color:'white',fontWeight:"bold"}}>Participate details</Text></TouchableOpacity>
                  </View>
 
-                 {/* <View style={styles.flatmain}>
+                  <View style={styles.flatmain}>
                  <View style={styles.TxtView1}><Text style={styles.Txt1}>Deal Status </Text></View>
-                 <View><Text style={styles.Txt2}>{item.participationStatus}</Text></View>
-                 </View> */}
+                 {item.participationStatus=="ACHIEVED"?
+                 <View><Text style={styles.Txt2}>Deal Closed</Text></View>
+                                                :
+                 <View><TouchableOpacity style={styles.btn1} onPress={()=>navigation.navigate('SingleDeal',{id:item.dealId})}><Text style={styles.Txt2}>Participate</Text></TouchableOpacity></View>}
+                 </View>
             </View>
             )}
 
   return (
-    <SafeAreaView style={{paddingTop:20,flex:1,marginBottom:0}}>
-    <View style={{flexDirection:'row',marginTop:20}}>
-    <TouchableOpacity onPress={()=>navigation.navigate('LenderDrawer')} style={{alignSelf:'flex-start'}}>
-    <MaterialCommunityIcons style={{marginLeft:20,alignSelf:'center'}} name = "arrow-left-thick" color = 'black' size = { 35 }/>
-    </TouchableOpacity>
-    <Text style={{fontSize:22,fontWeight:'bold',alignItems:'center',justifyContent:'center',marginLeft:55}}>Participated Deals</Text>
-    </View>
-
+    <SafeAreaView style={{paddingTop:5,flex:1,marginBottom:0}}>
        <FlatList
            data={Participated}
 
@@ -147,7 +144,16 @@ const styles = StyleSheet.create({
 
     TxtView1:{
         width:190,
-    }
+    },
+    btn1:{
+      padding:5,
+      width:90,
+      justifyContent:"center",
+      alignItems:"center",
+      borderRadius:5,
+      backgroundColor:"#4CAF50",
+      marginLeft:10
+      },
 
   })
 

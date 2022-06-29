@@ -25,6 +25,7 @@ const [text,setText] = useState('01/05/2014');
  const GetPreviousData=props.route.params;
  var userId=GetEmaildata.userId;
  var username=GetPreviousData.username;
+ var primaryType=GetPreviousData.primaryType;
 
  const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -81,7 +82,7 @@ const showMode = (currentMode)=> {
                            setLoading(false);
                            props.navigation.navigate('Success',{
                                 username:username,
-                               //   useremail :useremail,
+                               primaryType:primaryType
                            })
                        }, 1000);
                      })

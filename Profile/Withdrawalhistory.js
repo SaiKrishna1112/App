@@ -85,13 +85,6 @@ const Withdrawalhistory= props =>{
 
     return (
         <SafeAreaView>
-      <View style={{flexDirection:"row"}}>
-        <TouchableOpacity onPress={()=>{props.navigation.push("LenderDrawer")}}>
-
-        <Icon name="arrow-back" size={35} style={{marginTop:10,marginLeft:20}}/>
-        </TouchableOpacity>
-        <Text style={{fontSize:20,fontWeight:"bold",marginBottom:20,alignSelf:'center',color:"#317BE0",marginLeft:8,marginTop:10}}> Lender Withdrawal History </Text>
-      </View>
         <View>
         <FlatList
              data={history}

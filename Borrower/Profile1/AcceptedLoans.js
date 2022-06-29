@@ -14,7 +14,7 @@ const AcceptedLoans=({navigation})=>{
   const [loading,setLoading]=useState(false);
 
   const postFunction=()=>{
-   
+
   }
 
   const renderList = ({item})=>{
@@ -67,13 +67,7 @@ const AcceptedLoans=({navigation})=>{
      };
 
   return(
-      <View style={{flex:9,marginTop:20}}>
-      <View style={{flexDirection:'row',marginTop:30}}>
-      <TouchableOpacity onPress={()=>navigation.navigate('BorrowerDrawer')} style={{alignSelf:'flex-start'}}>
-      <MaterialCommunityIcons style={{marginLeft:15,alignSelf:'center'}} name = "arrow-left-thick" color = 'black' size = { 35 }/>
-      </TouchableOpacity>
-      <Text style={{fontSize:22,fontWeight:'bold',alignItems:'center',justifyContent:'center',marginLeft:75}}>Accepted Loans</Text>
-      </View>
+      <View style={{flex:9,marginTop:5}}>
              <View style={{marginTop:20}}>
 
              </View>

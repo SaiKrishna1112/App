@@ -7,8 +7,6 @@ import {useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const data = [
-      { label: '8', value: '8' },
-      { label: '9', value: '9' },
       { label: '10', value: '10' },
       { label: '11', value: '11' },
       { label: '12', value: '12' },
@@ -119,7 +117,7 @@ const submitfunction=props=>{
        .then(function (response) {
        if(value2=="Reduce")
        {
-         setEmi1(response.data.reduceCalculationEmi);
+         setEmi(response.data.reduceCalculationEmi);
 
        }
        else{
@@ -180,14 +178,7 @@ const renderList = ({ item }) => {
 
   return(
        <View style={styles.container}>
-        <View style={{flexDirection:"row"}}>
-              <TouchableOpacity onPress={()=>{props.navigation.push("LenderDrawer")}}>
-                    <Icon name="arrow-back" size={35} style={{marginTop:40,marginLeft:20}}/>
-              </TouchableOpacity>
-            <Text style={styles.text}>Emi Calculator</Text>
-        </View>
-
-            <View style={styles.cont}>
+          <View style={styles.cont}>
               <View style={{flexDirection:"row"}}>
                 <View>
                     <Text style={{fontSize:15,fontWeight:"bold",marginLeft:10,marginTop:10}}>Loan Amount</Text>
@@ -287,12 +278,12 @@ borderColor:"grey",
 borderRadius:5
 },
 cont:{
-    width:320,
-    borderRadius: 10,
+    width:350,
+    borderRadius: 5,
     backgroundColor: 'white',
     alignSelf:"center",
     marginTop:20,
-    height:260
+    height:260,
 },
 placeholderStyle: {
         fontSize: 14,

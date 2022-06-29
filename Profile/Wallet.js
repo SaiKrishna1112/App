@@ -137,12 +137,6 @@ function Load(){
            </TouchableOpacity>
           </View>
          </View>
-         <View style={{alignSelf:'center'}}>
-         <TouchableOpacity  style={styles.appButtonContainer}
-         onPress={()=>navigation.navigate('MyTransactionHistory')}>
-           <Text style={styles.appButtonText}>Transaction History</Text>
-         </TouchableOpacity>
-        </View>
          <Modal animationType="slide"
      visible={modal1}>
      <TouchableOpacity onPress={Save}>

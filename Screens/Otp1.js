@@ -36,9 +36,10 @@ const otpfunction=async ()=>{
             console.log(response.data);
                     setTimeout(function(){
                      setLoading(false);
-                    props.navigation.navigate('Messagespage',{
+                    props.navigation.navigate('Part 2',{
                            emaildata:response.data,
-                           username:username
+                           username:username,
+                           primaryType:primaryType
                           })
                    },4000);
                    })
@@ -83,33 +84,6 @@ const onResendOtpButtonPress = () => {
     setValue('')
     setResendButtonDisabledTime(RESEND_OTP_TIME_LIMIT);
     startResendOtpTimer();
-    axios.post('http://ec2-13-235-82-38.ap-south-1.compute.amazonaws.com:8080/oxyloans/v1/user/newUserRegistration', {
-        citizenship:"NONNRI",
-        mobileNumber: mobileNumber
-      })
-      .then(function (response) {
-       //console.log(response.data);
-       setTimeout(function(){
-                    setLoading(false);
-                    props.navigation.navigate('Otp1',{
-                        mobiledata:response.data,
-                          username:username,
-                          useremail :useremail,
-                          userpassword:userpassword
-                    })
-                }, 3000);
-              })
-      .catch(function (error) {
-        console.log(error);
-        console.log(error.response.data.errorMessage);
-        Alert.alert(
-  "Warring",
-  error.response.data.errorMessage,
-  [
-    { text: "OK", onPress: () => console.log("OK Pressed") }
-  ]
-);
-});
     // resend OTP Api call
     // todo
     console.log('Resend OTP');

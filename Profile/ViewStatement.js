@@ -36,7 +36,7 @@ const ViewStatement = ({route,navigation}) => {
 
         const renderList = ({ item }) => {
             return (
-                
+
                 <View style={{backgroundColor:'white',marginHorizontal:11,height:"auto",padding:8,borderColor:'grey',borderWidth:2.5,borderBottomWidth:0}}>
                 <View style={styles.flatmain}>
                 <View style={styles.TxtView1}><Text style={styles.Txt1}>SNo</Text></View>
@@ -77,13 +77,7 @@ const ViewStatement = ({route,navigation}) => {
 
         return (
 
-            <SafeAreaView style={{paddingTop:20,flex:1,marginBottom:0}}>
-            <View style={{flexDirection:'row',marginTop:25}}>
-            <TouchableOpacity onPress={()=>navigation.navigate('ParticpatedDeals')} style={{alignSelf:'flex-start'}}>
-            <MaterialCommunityIcons style={{marginLeft:20,alignSelf:'center'}} name = "arrow-left-thick" color = 'black' size = { 35 }/>
-            </TouchableOpacity>
-            <Text style={{fontSize:22,fontWeight:'bold',alignItems:'center',justifyContent:'center',marginLeft:20,color:'#2B547E'}}>Deal Level Loan EmiCard</Text>
-            </View>
+            <SafeAreaView style={{paddingTop:6,flex:1,marginBottom:0}}>
                  <View style={{marginTop:8}}>
               <FlatList
                    data={Statement}

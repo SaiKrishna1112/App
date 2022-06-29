@@ -41,15 +41,15 @@ onRegionChange = (region) => {
 componentWillMount() {
    this.getCurrentAddress;
   }
-// getAddress({
-//     get("https://maps.googleapis.com/maps/api/geocode/json?     address=" + this.state.region.latitude+"," +this.state.region.longitude +"&key=" + <YOUR_GOOGLE_API_KEY>).then((response) => response.json()).then((responseJson) => {
-//   console.log("ADDRESS GEOCODE is BACK!! => " +
-// JSON.stringify(responseJson));
-//    this.setState(
-//      { address:         JSON.stringify(responseJson.results[0].formatted_address)
-//       .replace(/"/g, "")
-//      });
-//    });
+getAddress({
+    get("https://maps.googleapis.com/maps/api/geocode/json?     address=" + this.state.region.latitude+"," +this.state.region.longitude +"&key=" + <YOUR_GOOGLE_API_KEY>).then((response) => response.json()).then((responseJson) => {
+  console.log("ADDRESS GEOCODE is BACK!! => " +
+JSON.stringify(responseJson));
+   this.setState(
+     { address:         JSON.stringify(responseJson.results[0].formatted_address)
+      .replace(/"/g, "")
+     });
+   });
 render() {
    const { region } = this.state;
 

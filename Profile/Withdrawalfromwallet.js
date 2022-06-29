@@ -22,6 +22,7 @@ const Withdrawalfromwallet= ({navigation}) =>{
     const [mode,setMode] = useState('date');
     const [text,setText] = useState('09/06/2022');
     const [currentTime, setCurrentTime] = useState(new Date());
+    const [loading,setLoading]=useState(false)
 
 
 const[show,setshow]=useState()
@@ -93,7 +94,7 @@ axios.get('http://ec2-13-235-82-38.ap-south-1.compute.amazonaws.com:8080/oxyloan
             setTimeout(function(){
              setLoading(false);
              console.log(response.data);
-              setstatus(response.data.status);
+              
            },3000);
            })
    .catch(function (error) {
