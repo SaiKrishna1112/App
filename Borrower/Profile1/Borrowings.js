@@ -293,7 +293,7 @@ const DeleteFunction=()=>{
  .then(function (response) {
 console.log(response.data);
    setTimeout(function(){
-       Alert.alert("Your Loan Application will be hold");
+       Alert.alert("Your Loan Application will be Delete");
  }, 3000);
  })
  .catch(function (error) {
@@ -447,7 +447,7 @@ const styles=StyleSheet.create({
           width:180,
       },
       TxtView:{
-          width:130,
+          width:100,
       }
 })
 

@@ -11,6 +11,8 @@ import {Picker} from "@react-native-picker/picker";
 
 const ReferralFriend=props=>{
     const userDetails =useSelector(state=>state.counter);
+    const userDetail = useSelector(state=>state.logged);
+    var userId= userDetail.userDisplayId;
     var access = userDetails.headers.accesstoken;
    var id = userDetails.data.id;
     const[fname,setfname]=useState("");
@@ -135,6 +137,7 @@ const onShare = async () => {
     return(
 <View style={styles.container}>
 <View style={{alignSelf:'center'}}>
+<ScrollView>
     <View style={styles.cont}>
         <Text style={styles.txt1}> Refer a Friend & Earn  </Text>
         <Text style={styles.text}><Icon name="arrow-forward" color="#4F8EF7" size={20}/>  Let us grow as a family, while you are lending money through OXYLOANS, we ourselves a back-up in life for each other in all kinds of times.
@@ -146,17 +149,16 @@ const onShare = async () => {
     </View>
     <TouchableOpacity onPress={onShare}>
     <View style={{marginTop:5,marginLeft:250,flexDirection:'row',borderWidth:1,backgroundColor:'#00ffff'}}>
-       <Icon name="share-social" label="Borrower" size={18}/>
+       <Icon name="share-social" size={18}/>
        <Text style={{fontWeight:'bold'}}>Borrower</Text>
     </View>
     </TouchableOpacity>
     <TouchableOpacity onPress={onShares}>
     <View style={{marginTop:5,marginLeft:250,flexDirection:'row',borderWidth:1,backgroundColor:'#bdb76b'}}>
-       <Icon name="share-social" label="Borrower" size={18}/>
+       <Icon name="share-social"  size={18}/>
        <Text style={{fontWeight:'bold'}}>Lender</Text>
     </View>
     </TouchableOpacity>
-    <ScrollView>
     <View style={styles.cont1}>
         <Text style={styles.txt1}>Invite Friends/Professionals </Text>
         <View style={{alignItems:'center'}}>

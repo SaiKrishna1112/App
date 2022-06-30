@@ -76,7 +76,7 @@ import allReducers from './src/reducers';
 import { Provider } from 'react-redux';
 import { LogBox } from "react-native";
 
-LogBox.ignoreLogs(["EventEmitter.removeListener","ViewPropTypes"]);
+LogBox.ignoreLogs(["EventEmitter.removeListener","ViewPropTypes",'VirtualizedLists','Warning:...']);
 const store = createStore(
                allReducers
               );
@@ -215,7 +215,7 @@ function PartnerDrawer(){
         <Stack.Screen name = "Login" component = { Login } options={{headerShown: false}}/>
         <Stack.Screen name = "Primary Type" component = { Registration } options={{headerShown: false}}/>
         <Stack.Screen name = "ViewLoginData" component = { ViewLoginData } options={{headerShown: false}}/>
-        <Stack.Screen name = "Registration" component = { Registation }/>
+        <Stack.Screen name = "Registration" component = { Registation } options={{headerShown: false}}/>
         <Stack.Screen name = "Part 1" component = { Otp1 } options={{headerShown: false}}/>
         <Stack.Screen name = "Part 2"component = { Messagespage } options={{headerShown: false}}/>
         <Stack.Screen name = "Success"component = { Success } options={{headerShown: false}}/>

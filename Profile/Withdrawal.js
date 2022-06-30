@@ -160,7 +160,7 @@ return(
   <TouchableOpacity onPress={()=>navigation.navigate('Withdrawalfromwallet')}><Text style={styles.txt}>From a Wallet</Text></TouchableOpacity>
    </View>
    <View style={styles.btn}>
-   <TouchableOpacity onPress={()=>navigation.navigate('Withdrawalhistory')}><Text style={styles.txt}>Transaction History</Text></TouchableOpacity>
+   <TouchableOpacity onPress={()=>navigation.navigate('Withdrawalhistory')}><Text style={styles.txt}>Withdrawal History</Text></TouchableOpacity>
     </View>
     </View>
   <FlatList

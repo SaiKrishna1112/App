@@ -4,7 +4,7 @@ import {View,Text,StyleSheet,SafeAreaView,Image,TextInput,Button,TouchableNative
 const Openpage = ({navigation})=>{
    return(
      <TouchableNativeFeedback onPress={()=>{
-         navigation.push('Primary Type'); }}>
+         navigation.push('Login1'); }}>
            <View style={styles.container}>
              <View>
                <View style={styles.logo}>

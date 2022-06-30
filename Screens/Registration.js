@@ -5,7 +5,7 @@ const  Registration=props=>{
   return (
     <View style={styles.container}>
             <TouchableOpacity onPress={()=>{
-                props.navigation.push('Login1',{primaryType:"BORROWER"}); }}>
+                props.navigation.push('Registration',{primaryType:"BORROWER"}); }}>
                  <View style={styles.boxcontainer}>
                   <View>
                   <View style={styles.logo}>
@@ -16,7 +16,7 @@ const  Registration=props=>{
            </TouchableOpacity>
 
            <TouchableOpacity onPress={()=>{
-               props.navigation.push('Login1',{primaryType:"LENDER"});}}>
+               props.navigation.push('Registration',{primaryType:"LENDER"});}}>
                <View style={styles.boxcontainer}>
                  <View>
                    <View style={styles.logo}>

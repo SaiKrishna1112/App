@@ -15,7 +15,6 @@ const BorrowerReferralFriend=({navigation})=>{
     var access = userDetails.headers.accesstoken;
    var id = userDetails.data.id;
    var userId= userDetail.userDisplayId;
-   alert(userId);
     const[fname,setfname]=useState("");
     const[email,setfemail]=useState("");
     const[number,setfnumber]=useState("");

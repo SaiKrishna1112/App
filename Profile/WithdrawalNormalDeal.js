@@ -47,7 +47,6 @@ const WithdrawalNormalDeal=({route,navigation})=>{
      { text: "OK", onPress:() => navigation.navigate('LenderDrawer') }
     ]
     );
-         Alert.alert()
       },4000);
                 })
         .catch(function (error) {

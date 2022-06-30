@@ -313,7 +313,7 @@ useEffect(()=>{
        </View>
         </View>
        <View >
-         <Text>MemberShip Validity Date:  {Dates}</Text>
+         <Text style={{fontWeight:'bold'}}>MemberShip Validity Date:  {Dates}</Text>
        </View>
       </View>
   );

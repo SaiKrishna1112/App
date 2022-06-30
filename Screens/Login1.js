@@ -14,7 +14,7 @@ const Login1 = para => {
  const dispatch = useDispatch();
  const [username,setUsername]=useState()
  const [userpass,setuserpass]=useState('');
- const [primaryType,setprimaryType]=useState(para.route.params.primaryType);
+ const [primaryType,setprimaryType]=useState();
  const[load, setLoad]=useState(false);
 const [loading, setLoading] = useState(false);
 const [accessToken,setAccessToken] = useState("");
@@ -44,21 +44,12 @@ const [rightIcon, setRightIcon] = useState('eye-off');
 };
 const { passwordVisibility, rightIcon, handlePasswordVisibility } =
   useTogglePasswordVisibility();
-const [password, setPassword] = useState('Test@123');
+const [password, setPassword] = useState();
 const setToastMsg=(msg) =>{
  ToastAndroid.showWithGravity(msg, ToastAndroid.SHORT, ToastAndroid.CENTER);
 }
-function fuction(){
- if(para.route.params.primaryType=="LENDER"){
-  setUsername('savicky@gmail.com')
- }else{
-  setUsername('saivicky2324@gmail.com')
- }
-}
 
-useEffect(()=>{
- fuction();
-},[]);
+
 const submitfunction= ()=>{
    if(username==""){
     setToastMsg('Please Enter Email');
@@ -180,7 +171,7 @@ const submitfunction= ()=>{
                  </TouchableOpacity>
                   <Text style={{fontSize:16,fontWeight:'bold',alignSelf:'center',justifyContent:'center'}}>OR</Text>
                   <TouchableOpacity style={styles.appButtonContainer} onPress={()=>{
-                     para.navigation.push('Registration',{primaryType:primaryType}); }}>
+                     para.navigation.push('Primary Type')}}>
                      <Text style={styles.appButtonText}>Register</Text>
                   </TouchableOpacity>
                   </ScrollView>

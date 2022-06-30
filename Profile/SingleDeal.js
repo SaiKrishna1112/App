@@ -6,7 +6,7 @@ import { RadioButton } from 'react-native-paper';
 import AnimatedLoader from "react-native-animated-loader";
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 
-import { StyleSheet, Text, View,Button ,TextInput,FlatList,Modal,SafeAreaView,TouchableOpacity,ScrollView} from 'react-native';
+import { StyleSheet, Text, View,Button ,Alert,TextInput,FlatList,Modal,SafeAreaView,TouchableOpacity,ScrollView} from 'react-native';
 
 const SingleDeal = ({route,navigation}) => {
   const [value, setValue] = useState("MONTHLY");
@@ -40,7 +40,7 @@ const SingleDeal = ({route,navigation}) => {
                  })
 
         .then(function(response){
-            //console.log(response.data);
+            console.log(response.data);
 
             setDealName(response.data.dealName)
             setDealAmount(response.data.dealAmount)
@@ -80,8 +80,17 @@ const dealparticipate = params => {
   return false;
  }
  if(amount<=5000){
-  alert("Please Enter Above INR5000 or INR5000")
+  alert("Please Enter Above INR 5000")
   return false
+ }
+ var data ={
+  userId:id,
+  groupId:groupid,
+  dealId:dealId,
+  participatedAmount:amount,
+  lenderReturnType:value,
+  rateofInterest:roi,
+  processingFee:0
  }
  setloading(true)
 axios.patch('http://ec2-13-235-82-38.ap-south-1.compute.amazonaws.com:8080/oxyloans/v1/user/updatingLenderDeal',
@@ -119,7 +128,7 @@ data,
 
 
   return (
-    <SafeAreaView style={{paddingTop:4,flex:1,marginBottom:10}}>
+    <SafeAreaView style={{paddingTop:4,flex:5,marginBottom:10}}>
     <View style={{marginHorizontal:20}}>
 
     </View>
@@ -193,22 +202,6 @@ data,
                  <RadioButton.Item value="MONTHLY"/>
                  <Text style={{fontSize:18,left:-10,top:-2}}>Monthly Interest Pay-out {roi}</Text>
                </View>
-               <View style={{flexDirection:'row',alignItems:'center',top:-2}}>
-                 <RadioButton.Item value="QUARTELY"/>
-                 <Text style={{fontSize:18,left:-10,top:-2}}>Quaterly Interest 0%</Text>
-               </View>
-               <View style={{flexDirection:'row',alignItems:'center',top:-2}}>
-                 <RadioButton.Item value="HALFLY"/>
-                 <Text style={{fontSize:18,left:-10,top:-2}}>Half-Yearly Interest Pay-out 0%</Text>
-               </View>
-               <View style={{flexDirection:'row',alignItems:'center',top:-2}}>
-                 <RadioButton.Item value="YEARLY"/>
-                 <Text style={{fontSize:18,left:-10,top:-2}}>Yearly Interest Pay-out 0%</Text>
-               </View>
-               <View style={{flexDirection:'row',alignItems:'center',top:-2}}>
-                 <RadioButton.Item value="ENDOFTHEDEAL"/>
-                 <Text style={{fontSize:18,left:-10,top:-2}}>End of Deal Interest Pay-out 0%</Text>
-               </View>
 
                <View style={{alignItems:'center',justifyContent:'center'}}>
                   <TouchableOpacity style={{backgroundColor:'#008EFF',width:200,padding:5,alignItems:'center'}}>
@@ -229,22 +222,7 @@ data,
                  <RadioButton.Item value="MONTHLY"/>
                  <Text style={{fontSize:18,left:-10,top:-2}}>Monthly Interest Pay-out 3%</Text>
                </View>
-               <View style={{flexDirection:'row',alignItems:'center',top:-2}}>
-                 <RadioButton.Item value="QUARTELY"/>
-                 <Text style={{fontSize:18,left:-10,top:-2}}>Quaterly Interest 0%</Text>
-               </View>
-               <View style={{flexDirection:'row',alignItems:'center',top:-2}}>
-                 <RadioButton.Item value="HALFLY"/>
-                 <Text style={{fontSize:18,left:-10,top:-2}}>Half-Yearly Interest Pay-out 0%</Text>
-               </View>
-               <View style={{flexDirection:'row',alignItems:'center',top:-2}}>
-                 <RadioButton.Item value="YEARLY"/>
-                 <Text style={{fontSize:18,left:-10,top:-2}}>Yearly Interest Pay-out 0%</Text>
-               </View>
-               <View style={{flexDirection:'row',alignItems:'center',top:-2}}>
-                 <RadioButton.Item value="ENDOFTHEDEAL"/>
-                 <Text style={{fontSize:18,left:-10,top:-2}}>End of Deal Interest Pay-out 0%</Text>
-               </View>
+
 
                <View style={{alignItems:'center',justifyContent:'center'}}>
                   <TouchableOpacity style={{backgroundColor:'#008EFF',width:200,padding:5,alignItems:'center'}} onPress={dealparticipate}>
@@ -306,3 +284,21 @@ const styles = StyleSheet.create({
   })
 
 export default SingleDeal;
+
+
+// <View style={{flexDirection:'row',alignItems:'center',top:-2}}>
+//   <RadioButton.Item value="QUARTELY"/>
+//   <Text style={{fontSize:18,left:-10,top:-2}}>Quaterly Interest 0%</Text>
+// </View>
+// <View style={{flexDirection:'row',alignItems:'center',top:-2}}>
+//   <RadioButton.Item value="HALFLY"/>
+//   <Text style={{fontSize:18,left:-10,top:-2}}>Half-Yearly Interest Pay-out 0%</Text>
+// </View>
+// <View style={{flexDirection:'row',alignItems:'center',top:-2}}>
+//   <RadioButton.Item value="YEARLY"/>
+//   <Text style={{fontSize:18,left:-10,top:-2}}>Yearly Interest Pay-out 0%</Text>
+// </View>
+// <View style={{flexDirection:'row',alignItems:'center',top:-2}}>
+//   <RadioButton.Item value="ENDOFTHEDEAL"/>
+//   <Text style={{fontSize:18,left:-10,top:-2}}>End of Deal Interest Pay-out 0%</Text>
+// </View>

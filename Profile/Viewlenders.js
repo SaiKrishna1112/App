@@ -80,7 +80,7 @@ const ViewLenders =({route,navigation}) => {
 
                    renderItem={renderList}
 
-                //    keyExtractor={item => item.Id}
+                    keyExtractor={item => item.Id}
               />
 
 

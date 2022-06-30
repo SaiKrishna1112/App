@@ -1068,7 +1068,7 @@ const getprofieshowss=()=>{
      getcheque();
      getaadhar();
      getprofieshowss();
-
+     setLoading(false);
     },[]);
 
   return(

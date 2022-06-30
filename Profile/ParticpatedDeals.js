@@ -83,18 +83,19 @@ const ParticpatedDeals = ({navigation}) => {
                  <View><Text style={styles.Txt2}>{item.registeredDate}</Text></View>
                  </View>
 
+                       <View style={{flexDirection:'row'}}>
                  <View style={{alignItems:'center',justifyContent:'center',padding:14,borderBottomColor:'grey',borderBottomWidth:1,}}>
-                 <TouchableOpacity style={{backgroundColor:'#569F40',borderRadius:3,height:28,width:180,alignItems:'center',justifyContent:'center',}}
+                 <TouchableOpacity style={{backgroundColor:'#569F40',borderRadius:3,height:28,width:130,alignItems:'center',justifyContent:'center',}}
                     onPress={()=>navigation.navigate('ViewStatement',{id:item.dealId})}><Text style={{color:'white',fontWeight:"bold"}}>View Statements</Text></TouchableOpacity>
                  </View>
 
 
                  <View style={{alignItems:'center',justifyContent:'center',padding:14,borderBottomColor:'grey',borderBottomWidth:1,}}>
 
-                 <TouchableOpacity style={{backgroundColor:'#569F40',borderRadius:3,height:28,width:180,alignItems:'center',justifyContent:'center',}}
+                 <TouchableOpacity style={{backgroundColor:'#569F40',borderRadius:3,height:28,width:130,alignItems:'center',justifyContent:'center',}}
                     onPress={()=>navigation.navigate('Participate Details',{id:item.dealId})}><Text style={{color:'white',fontWeight:"bold"}}>Participate details</Text></TouchableOpacity>
                  </View>
-
+                      </View>
                   <View style={styles.flatmain}>
                  <View style={styles.TxtView1}><Text style={styles.Txt1}>Deal Status </Text></View>
                  {item.participationStatus=="ACHIEVED"?
